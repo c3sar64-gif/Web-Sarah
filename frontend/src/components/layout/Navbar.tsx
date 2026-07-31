@@ -1,34 +1,67 @@
+import { useEffect, useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { useCart } from '../../context/CartContext'
+
+const LINKS = [
+  { label: 'Inicio', to: '/' },
+  { label: 'Especialidades', to: '/especialidades' },
+  { label: 'Sobre Mí', to: '/sobre-mi' },
+  { label: 'Contacto', to: '/contacto' },
+]
+
 export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false)
+  const { count, openCart } = useCart()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-neutral-200">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <a href="/" className="text-lg font-semibold tracking-tight">
-          Mi Tienda
-        </a>
-        <ul className="hidden gap-6 text-sm font-medium text-neutral-700 sm:flex">
-          <li>
-            <a href="#productos" className="hover:text-red-600">
-              Productos
-            </a>
-          </li>
-          <li>
-            <a href="#nosotros" className="hover:text-red-600">
-              Nosotros
-            </a>
-          </li>
-          <li>
-            <a href="#contacto" className="hover:text-red-600">
-              Contacto
-            </a>
-          </li>
-        </ul>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-cream/95 shadow-md border-b border-taupe/30 backdrop-blur-sm'
+          : 'bg-transparent border-b border-transparent'
+      }`}
+    >
+      <div className="max-w-6xl mx-auto flex items-center justify-between px-8 md:px-14 py-4">
+        <Link to="/" className="flex items-center">
+          <img src="/logo.png" alt="Sarah — Horneado con Amor" className="h-12 md:h-14 w-auto" />
+        </Link>
+
+        <nav className="hidden md:flex items-center gap-10">
+          {LINKS.map((l) => (
+            <NavLink
+              key={l.label}
+              to={l.to}
+              end={l.to === '/'}
+              className={({ isActive }) =>
+                `text-sm font-medium transition-colors ${
+                  isActive ? 'text-mauve' : 'text-[#3D2C33] hover:text-mauve'
+                }`
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
+
         <button
           type="button"
-          className="rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+          onClick={openCart}
+          className="relative flex items-center gap-2 rounded-full bg-rose-metallic hover:bg-rose-metallic-dark text-white text-sm font-medium px-5 py-2.5 transition-colors"
         >
-          Carrito (0)
+          Mi pedido
+          {count > 0 && (
+            <span className="absolute -top-2 -right-2 bg-mauve text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
+              {count}
+            </span>
+          )}
         </button>
-      </nav>
+      </div>
     </header>
   )
 }

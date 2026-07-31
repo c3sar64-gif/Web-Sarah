@@ -1,8 +1,16 @@
+export interface Categoria {
+  id: number
+  nombre: string
+  descripcion: string | null
+}
+
 export interface Product {
   id: number
-  name: string
-  description: string
-  price: number
-  imageUrl: string
-  stock: number
+  nombre: string
+  descripcion: string | null
+  precio: number
+  imagenUrl: string | null
+  disponible: boolean
+  categoriaId: number | null
+  categoria: Categoria | null
 }

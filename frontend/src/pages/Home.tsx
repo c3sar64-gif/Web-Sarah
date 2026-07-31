@@ -1,58 +1,62 @@
+import { Link } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
+import Hero from '../components/Hero'
 import ProductCard from '../components/ProductCard'
 import { useProducts } from '../hooks/useProducts'
 
 export default function Home() {
   const { products, loading, error } = useProducts()
+  const destacados = products.slice(0, 4)
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="font-body bg-cream text-[#3D2C33] min-h-screen overflow-x-hidden">
       <Navbar />
 
-      <main className="flex-1">
-        <section className="bg-gradient-to-b from-red-50 to-white px-4 py-16 text-center">
-          <h1 className="mx-auto max-w-2xl text-4xl font-bold tracking-tight text-neutral-900 sm:text-5xl">
-            Bienvenida a tu tienda
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl text-neutral-600">
-            Este es el punto de partida del sitio. Cuando compartas el diseño final,
-            se reemplaza este contenido por el layout definitivo.
-          </p>
-        </section>
+      <main>
+        <Hero />
 
-        <section id="productos" className="mx-auto max-w-6xl px-4 py-12">
-          <h2 className="mb-6 text-2xl font-semibold text-neutral-900">Productos</h2>
+        <section className="max-w-6xl mx-auto px-8 md:px-14 py-24">
+          <div className="text-center max-w-xl mx-auto mb-14">
+            <span className="text-sm tracking-widest uppercase text-sage-dark font-semibold">
+              Lo más pedido
+            </span>
+            <h2 className="font-display text-3xl md:text-4xl text-[#3D2C33] mt-3">
+              Un vistazo a nuestras especialidades
+            </h2>
+          </div>
 
-          {loading && <p className="text-neutral-500">Cargando productos…</p>}
+          {loading && <p className="text-center text-[#6B5560]">Cargando productos…</p>}
 
           {error && (
-            <p className="text-sm text-neutral-500">
-              No se pudo conectar al backend todavía ({error}). Los productos
-              aparecerán aquí una vez que la API esté corriendo.
+            <p className="text-center text-sm text-[#6B5560]">
+              No se pudo conectar al backend todavía ({error}). Los productos aparecerán aquí una
+              vez que la API esté corriendo.
             </p>
           )}
 
-          {!loading && !error && products.length === 0 && (
-            <p className="text-neutral-500">
-              Todavía no hay productos cargados. Agrégalos desde el panel de
-              administración de Django.
+          {!loading && !error && destacados.length === 0 && (
+            <p className="text-center text-[#6B5560]">
+              Todavía no hay productos cargados. Agrégalos desde la API o directo en la base de
+              Supabase.
             </p>
           )}
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </section>
+          {destacados.length > 0 && (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {destacados.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
 
-        <section id="nosotros" className="bg-neutral-50 px-4 py-12">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="text-2xl font-semibold text-neutral-900">Nosotros</h2>
-            <p className="mt-3 text-neutral-600">
-              Contenido pendiente — reemplazar con la historia de la marca.
-            </p>
+          <div className="text-center mt-12">
+            <Link
+              to="/especialidades"
+              className="inline-block rounded-full bg-rose-metallic hover:bg-rose-metallic-dark text-white font-medium px-7 py-3.5 transition-all hover:-translate-y-0.5"
+            >
+              Ver todo el menú
+            </Link>
           </div>
         </section>
       </main>

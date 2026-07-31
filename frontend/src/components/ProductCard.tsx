@@ -1,32 +1,56 @@
+import { useState } from 'react'
 import type { Product } from '../types/product'
+import { useCart } from '../context/CartContext'
 
 interface Props {
   product: Product
 }
 
+const PLACEHOLDER_IMG = 'https://placehold.co/400x300?text=Sin+imagen'
+
 export default function ProductCard({ product }: Props) {
+  const { addItem } = useCart()
+  const [agregado, setAgregado] = useState(false)
+
+  const handleAgregar = () => {
+    addItem(product)
+    setAgregado(true)
+    setTimeout(() => setAgregado(false), 1200)
+  }
+
   return (
-    <div className="flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition hover:shadow-md">
-      <img
-        src={product.imageUrl}
-        alt={product.name}
-        className="h-48 w-full object-cover"
-      />
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <h3 className="font-semibold text-neutral-900">{product.name}</h3>
-        <p className="line-clamp-2 text-sm text-neutral-500">{product.description}</p>
+    <article className="bg-white rounded-xl2 shadow-card overflow-hidden flex flex-col hover:-translate-y-1 transition-transform">
+      <div className="h-44 bg-[#F1EBE0] flex items-center justify-center overflow-hidden">
+        <img
+          src={product.imagenUrl ?? PLACEHOLDER_IMG}
+          alt={product.nombre}
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div className="flex flex-1 flex-col gap-2 p-5">
+        {product.categoria && (
+          <span className="text-xs font-medium uppercase tracking-wide text-sage-dark">
+            {product.categoria.nombre}
+          </span>
+        )}
+        <h3 className="font-display text-lg text-[#3D2C33]">{product.nombre}</h3>
+        {product.descripcion && (
+          <p className="line-clamp-2 text-sm text-[#6B5560] leading-relaxed">{product.descripcion}</p>
+        )}
         <div className="mt-auto flex items-center justify-between pt-2">
-          <span className="text-lg font-bold text-red-600">
-            ${product.price.toFixed(2)}
+          <span className="text-lg font-semibold text-mauve-dark">
+            ${product.precio.toFixed(2)}
           </span>
           <button
             type="button"
-            className="rounded-full bg-neutral-900 px-3 py-1.5 text-sm font-medium text-white hover:bg-neutral-700"
+            onClick={handleAgregar}
+            disabled={!product.disponible}
+            className="rounded-full bg-rose-metallic px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-metallic-dark disabled:cursor-not-allowed disabled:bg-taupe"
           >
-            Agregar
+            {!product.disponible ? 'Agotado' : agregado ? 'Agregado ✓' : 'Agregar'}
           </button>
         </div>
       </div>
-    </div>
+    </article>
   )
 }
