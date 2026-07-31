@@ -5,6 +5,13 @@ using Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Railway (y otros PaaS) exponen el puerto asignado via la variable de entorno PORT
+var port = Environment.GetEnvironmentVariable("PORT");
+if (!string.IsNullOrEmpty(port))
+{
+    builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+}
+
 // Controllers
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -45,13 +52,19 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Aplica migraciones pendientes al iniciar (Railway no da acceso a shell facil para `dotnet ef database update`)
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHttpsRedirection();
 }
-
-app.UseHttpsRedirection();
 
 app.UseCors(FrontendCorsPolicy);
 
