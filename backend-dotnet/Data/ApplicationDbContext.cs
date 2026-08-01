@@ -13,6 +13,7 @@ namespace Backend.Data
         public DbSet<Categoria> Categorias => Set<Categoria>();
         public DbSet<Producto> Productos => Set<Producto>();
         public DbSet<MensajeContacto> MensajesContacto => Set<MensajeContacto>();
+        public DbSet<Usuario> Usuarios => Set<Usuario>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,12 @@ namespace Backend.Data
             modelBuilder.Entity<MensajeContacto>(entity =>
             {
                 entity.ToTable("mensajes_contacto");
+            });
+
+            modelBuilder.Entity<Usuario>(entity =>
+            {
+                entity.ToTable("usuarios");
+                entity.HasIndex(u => u.Email).IsUnique();
             });
         }
     }
