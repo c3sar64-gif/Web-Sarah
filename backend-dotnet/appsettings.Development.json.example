@@ -7,5 +7,21 @@
   },
   "Email": {
     "SenderPassword": "PON_AQUI_TU_APP_PASSWORD_DE_GMAIL"
-  }
+  },
+  "Jwt": {
+    "Secret": "GENERAR_UN_SECRETO_ALEATORIO_LARGO"
+  },
+  "Google": {
+    "ClientId": "TU_GOOGLE_OAUTH_CLIENT_ID"
+  },
+  "Supabase": {
+    "S3": {
+      "AccessKey": "TU_ACCESS_KEY_ID",
+      "SecretKey": "TU_SECRET_ACCESS_KEY"
+    }
+  },
+  "AdminSeed": [
+    { "Nombre": "Tu Nombre", "Email": "tu@email.com", "Password": "ElegiUnaContraseña" },
+    { "Nombre": "Sarah", "Email": "sarah@email.com", "Password": "ElegiUnaContraseña" }
+  ]
 }
