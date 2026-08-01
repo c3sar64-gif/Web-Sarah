@@ -57,7 +57,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     db.Database.Migrate();
-    AdminSeeder.SeedAsync(db, app.Configuration).Wait();
+    await AdminSeeder.SeedAsync(db, app.Configuration);
 }
 
 if (app.Environment.IsDevelopment())
