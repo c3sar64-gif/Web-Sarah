@@ -1,3 +1,4 @@
+using Amazon.S3;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -64,6 +65,23 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IJwtService, JwtService>();
+
+// Cliente S3 apuntando a Supabase Storage
+builder.Services.AddSingleton<IAmazonS3>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var s3Config = new AmazonS3Config
+    {
+        ServiceURL = config["Supabase:S3:Endpoint"],
+        ForcePathStyle = true,
+        AuthenticationRegion = config["Supabase:S3:Region"] ?? "us-west-2",
+    };
+    return new AmazonS3Client(
+        config["Supabase:S3:AccessKey"],
+        config["Supabase:S3:SecretKey"],
+        s3Config);
+});
+builder.Services.AddScoped<IStorageService, SupabaseStorageService>();
 
 // Email (notificaciones del formulario de contacto)
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Email"));
