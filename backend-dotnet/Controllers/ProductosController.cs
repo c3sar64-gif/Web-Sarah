@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
@@ -41,6 +42,7 @@ namespace Backend.Controllers
         }
 
         // POST: api/productos
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Producto>> PostProducto(Producto producto)
         {
@@ -51,6 +53,7 @@ namespace Backend.Controllers
         }
 
         // PUT: api/productos/5
+        [Authorize]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutProducto(int id, Producto producto)
         {
@@ -74,6 +77,7 @@ namespace Backend.Controllers
         }
 
         // DELETE: api/productos/5
+        [Authorize]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProducto(int id)
         {
