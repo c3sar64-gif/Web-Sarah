@@ -1,8 +1,8 @@
 // frontend/src/context/AuthContext.tsx
 import { createContext, useContext, useState, type ReactNode } from 'react'
 
-const TOKEN_KEY = 'sarah_admin_token'
-const USER_KEY = 'sarah_admin_usuario'
+export const TOKEN_KEY = 'sarah_admin_token'
+export const USER_KEY = 'sarah_admin_usuario'
 
 export interface AdminUsuario {
   nombre: string
