@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
+import { GoogleLogin, GoogleOAuthProvider, type CredentialResponse } from '@react-oauth/google'
 import { useAuth } from '../../context/AuthContext'
 import { login as loginRequest, loginWithGoogle } from '../../api/auth'
+
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('')
@@ -87,10 +89,12 @@ export default function AdminLogin() {
         </div>
 
         <div className="flex justify-center">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => setError('No se pudo iniciar sesión con Google.')}
-          />
+          <GoogleOAuthProvider clientId={googleClientId}>
+            <GoogleLogin
+              onSuccess={handleGoogleSuccess}
+              onError={() => setError('No se pudo iniciar sesión con Google.')}
+            />
+          </GoogleOAuthProvider>
         </div>
       </div>
     </div>
