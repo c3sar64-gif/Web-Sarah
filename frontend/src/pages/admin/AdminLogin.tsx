@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 import { GoogleLogin, type CredentialResponse } from '@react-oauth/google'
 import { useAuth } from '../../context/AuthContext'
 import { login as loginRequest, loginWithGoogle } from '../../api/auth'
@@ -20,8 +21,9 @@ export default function AdminLogin() {
       const res = await loginRequest(email, password)
       login(res.token, { nombre: res.nombre, email: res.email })
       navigate('/admin/productos')
-    } catch {
-      setError('Credenciales inválidas.')
+    } catch (err) {
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined
+      setError(message ?? 'Credenciales inválidas.')
     } finally {
       setLoading(false)
     }
@@ -34,8 +36,9 @@ export default function AdminLogin() {
       const res = await loginWithGoogle(credentialResponse.credential)
       login(res.token, { nombre: res.nombre, email: res.email })
       navigate('/admin/productos')
-    } catch {
-      setError('Esta cuenta no tiene acceso al panel.')
+    } catch (err) {
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined
+      setError(message ?? 'Esta cuenta no tiene acceso al panel.')
     }
   }
 
