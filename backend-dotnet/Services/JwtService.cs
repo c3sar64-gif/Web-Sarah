@@ -12,8 +12,11 @@ namespace Backend.Services
 
         public JwtService(IConfiguration configuration)
         {
-            _secret = configuration["Jwt:Secret"]
-                ?? throw new InvalidOperationException("Falta configurar Jwt:Secret.");
+            var secret = configuration["Jwt:Secret"];
+            if (string.IsNullOrWhiteSpace(secret) || Encoding.UTF8.GetByteCount(secret) < 32)
+                throw new InvalidOperationException("Jwt:Secret debe estar configurado y tener al menos 32 bytes (256 bits) para HS256.");
+
+            _secret = secret;
         }
 
         public string GenerateToken(Usuario usuario)

@@ -13,10 +13,12 @@ namespace Backend.Controllers
         private const long TamanoMaximoBytes = 5 * 1024 * 1024;
 
         private readonly IStorageService _storageService;
+        private readonly ILogger<UploadsController> _logger;
 
-        public UploadsController(IStorageService storageService)
+        public UploadsController(IStorageService storageService, ILogger<UploadsController> logger)
         {
             _storageService = storageService;
+            _logger = logger;
         }
 
         public record UploadResponse(string Url);
@@ -38,8 +40,9 @@ namespace Backend.Controllers
                 var url = await _storageService.SubirImagenAsync(archivo, "fotos/productos");
                 return new UploadResponse(url);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Error al subir imagen a Supabase Storage");
                 return StatusCode(502, new { message = "No se pudo subir la imagen. Probá de nuevo." });
             }
         }

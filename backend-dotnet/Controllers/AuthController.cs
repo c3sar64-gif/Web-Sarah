@@ -65,7 +65,7 @@ namespace Backend.Controllers
         {
             var clientId = _configuration["Google:ClientId"];
             if (string.IsNullOrWhiteSpace(clientId))
-                return StatusCode(500, new { message = "Login con Google no está configurado." });
+                return StatusCode(503, new { message = "Login con Google no está configurado." });
 
             GoogleJsonWebSignature.Payload payload;
             try

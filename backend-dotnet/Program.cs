@@ -47,8 +47,9 @@ builder.Services.AddCors(options =>
 });
 
 // Autenticación JWT (login de administradores)
-var jwtSecret = builder.Configuration["Jwt:Secret"]
-    ?? throw new InvalidOperationException("Falta configurar Jwt:Secret.");
+var jwtSecret = builder.Configuration["Jwt:Secret"];
+if (string.IsNullOrWhiteSpace(jwtSecret) || Encoding.UTF8.GetByteCount(jwtSecret) < 32)
+    throw new InvalidOperationException("Jwt:Secret debe estar configurado y tener al menos 32 bytes (256 bits) para HS256.");
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
