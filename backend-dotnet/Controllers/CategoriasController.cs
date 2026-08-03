@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
@@ -36,6 +37,7 @@ namespace Backend.Controllers
         }
 
         // POST: api/categorias
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
         {
@@ -46,6 +48,7 @@ namespace Backend.Controllers
         }
 
         // PUT: api/categorias/5
+        [Authorize]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutCategoria(int id, Categoria categoria)
         {
@@ -69,6 +72,7 @@ namespace Backend.Controllers
         }
 
         // DELETE: api/categorias/5
+        [Authorize]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteCategoria(int id)
         {

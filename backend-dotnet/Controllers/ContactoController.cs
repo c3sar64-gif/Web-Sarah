@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
@@ -28,6 +29,7 @@ namespace Backend.Controllers
 
         // GET: api/contacto
         // Lista de mensajes recibidos (para revisión manual, sin panel de admin todavía).
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MensajeContacto>>> GetMensajes()
         {
