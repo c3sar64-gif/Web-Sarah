@@ -52,7 +52,7 @@ export default function AdminLogin() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-lg border border-taupe/50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-maupe"
+              className="w-full rounded-lg border border-taupe/50 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-mauve"
             />
           </div>
           <div>
