@@ -1,16 +1,22 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import { getProducts, deleteProduct } from '../../api/products'
 import type { Product } from '../../types/product'
 
 export default function AdminProductos() {
   const [productos, setProductos] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   const cargar = () => {
     setLoading(true)
     getProducts()
       .then(setProductos)
+      .catch((err) => {
+        const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined
+        setError(message ?? 'No se pudieron cargar los productos.')
+      })
       .finally(() => setLoading(false))
   }
 
@@ -20,8 +26,13 @@ export default function AdminProductos() {
 
   const handleEliminar = async (producto: Product) => {
     if (!confirm(`¿Seguro que querés eliminar "${producto.nombre}"?`)) return
-    await deleteProduct(producto.id)
-    cargar()
+    try {
+      await deleteProduct(producto.id)
+      cargar()
+    } catch (err) {
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined
+      setError(message ?? 'No se pudo eliminar el producto.')
+    }
   }
 
   if (loading) return <p>Cargando productos…</p>
@@ -37,6 +48,8 @@ export default function AdminProductos() {
           + Nuevo producto
         </Link>
       </div>
+
+      {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-sm">

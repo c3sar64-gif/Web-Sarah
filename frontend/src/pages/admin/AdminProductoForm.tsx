@@ -1,5 +1,6 @@
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import axios from 'axios'
 import { getProduct, getCategorias, createProduct, updateProduct } from '../../api/products'
 import { uploadImagen } from '../../api/uploads'
 import type { Categoria, ProductInput } from '../../types/product'
@@ -23,23 +24,28 @@ export default function AdminProductoForm() {
   const [subiendo, setSubiendo] = useState(false)
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
 
   useEffect(() => {
-    getCategorias().then(setCategorias)
+    getCategorias()
+      .then(setCategorias)
+      .catch(() => setLoadError('No se pudieron cargar las categorías. Recargá la página.'))
   }, [])
 
   useEffect(() => {
     if (!id) return
-    getProduct(Number(id)).then((p) =>
-      setForm({
-        nombre: p.nombre,
-        descripcion: p.descripcion,
-        precio: p.precio,
-        imagenUrl: p.imagenUrl,
-        disponible: p.disponible,
-        categoriaId: p.categoriaId,
-      }),
-    )
+    getProduct(Number(id))
+      .then((p) =>
+        setForm({
+          nombre: p.nombre,
+          descripcion: p.descripcion,
+          precio: p.precio,
+          imagenUrl: p.imagenUrl,
+          disponible: p.disponible,
+          categoriaId: p.categoriaId,
+        }),
+      )
+      .catch(() => setLoadError('No se pudo cargar el producto. Recargá la página antes de continuar.'))
   }, [id])
 
   const handleArchivo = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -50,8 +56,9 @@ export default function AdminProductoForm() {
     try {
       const url = await uploadImagen(file)
       setForm((f) => ({ ...f, imagenUrl: url }))
-    } catch {
-      setError('No se pudo subir la imagen. Probá de nuevo.')
+    } catch (err) {
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined
+      setError(message ?? 'No se pudo subir la imagen. Probá de nuevo.')
     } finally {
       setSubiendo(false)
     }
@@ -68,11 +75,23 @@ export default function AdminProductoForm() {
         await createProduct(form)
       }
       navigate('/admin/productos')
-    } catch {
-      setError('No se pudo guardar el producto.')
+    } catch (err) {
+      const message = axios.isAxiosError(err) ? err.response?.data?.message : undefined
+      setError(message ?? 'No se pudo guardar el producto.')
     } finally {
       setGuardando(false)
     }
+  }
+
+  if (esEdicion && loadError) {
+    return (
+      <div className="max-w-xl">
+        <h1 className="text-xl font-semibold text-mauve mb-6">Editar producto</h1>
+        <div className="bg-white rounded-xl shadow-sm p-6">
+          <p className="text-sm text-red-600">{loadError}</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -158,6 +177,7 @@ export default function AdminProductoForm() {
           )}
         </div>
 
+        {loadError && <p className="text-sm text-red-600">{loadError}</p>}
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <button
