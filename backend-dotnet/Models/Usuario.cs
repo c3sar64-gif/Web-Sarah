@@ -21,6 +21,10 @@ namespace Backend.Models
 
         public bool Bloqueado { get; set; } = false;
 
+        public string? RefreshToken { get; set; }
+
+        public DateTime? RefreshTokenExpiryTime { get; set; }
+
         public DateTime CreadoEn { get; set; } = DateTime.UtcNow;
     }
 }

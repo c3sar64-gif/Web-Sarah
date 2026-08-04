@@ -1,7 +1,9 @@
 using Amazon.S3;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Threading.RateLimiting;
 using Backend.Data;
 using Backend.Models;
 using Backend.Services;
@@ -25,6 +27,22 @@ builder.Services.AddControllers()
             System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
 
+// Memory Cache
+builder.Services.AddMemoryCache();
+
+// Rate Limiter Policy
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("ContactoPolicy", policy =>
+    {
+        policy.AutoReplenishment = true;
+        policy.PermitLimit = 3;
+        policy.Window = TimeSpan.FromMinutes(5);
+        policy.QueueLimit = 0;
+    });
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+});
+
 // DbContext -> PostgreSQL (Supabase)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -42,7 +60,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
@@ -51,16 +70,22 @@ var jwtSecret = builder.Configuration["Jwt:Secret"];
 if (string.IsNullOrWhiteSpace(jwtSecret) || Encoding.UTF8.GetByteCount(jwtSecret) < 32)
     throw new InvalidOperationException("Jwt:Secret debe estar configurado y tener al menos 32 bytes (256 bits) para HS256.");
 
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "SarahBakeryApi";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "SarahBakeryFrontend";
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret)),
+            ClockSkew = TimeSpan.Zero
         };
     });
 
@@ -109,7 +134,18 @@ if (app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
 }
 
+// HTTP Security Headers Middleware
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    await next();
+});
+
 app.UseCors(FrontendCorsPolicy);
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();

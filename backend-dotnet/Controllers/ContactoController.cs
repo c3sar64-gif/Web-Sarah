@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Models;
@@ -41,6 +42,7 @@ namespace Backend.Controllers
 
         // POST: api/contacto
         [HttpPost]
+        [EnableRateLimiting("ContactoPolicy")]
         public async Task<ActionResult<MensajeContacto>> PostMensaje(ContactoRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Nombre) ||
@@ -52,9 +54,9 @@ namespace Backend.Controllers
 
             var mensaje = new MensajeContacto
             {
-                Nombre = request.Nombre.Trim(),
-                Email = request.Email.Trim(),
-                Mensaje = request.Mensaje.Trim(),
+                Nombre = System.Net.WebUtility.HtmlEncode(request.Nombre.Trim()),
+                Email = System.Net.WebUtility.HtmlEncode(request.Email.Trim()),
+                Mensaje = System.Net.WebUtility.HtmlEncode(request.Mensaje.Trim()),
                 CreadoEn = DateTime.UtcNow,
             };
 

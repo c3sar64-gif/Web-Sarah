@@ -39,7 +39,7 @@ export default function ProductCard({ product }: Props) {
         )}
         <div className="mt-auto flex items-center justify-between pt-2">
           <span className="text-lg font-semibold text-mauve-dark">
-            ${product.precio.toFixed(2)}
+            Bs {product.precio.toFixed(2)}
           </span>
           <button
             type="button"

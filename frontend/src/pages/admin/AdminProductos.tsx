@@ -51,14 +51,51 @@ export default function AdminProductos() {
 
       {error && <p className="text-sm text-red-600 mb-4">{error}</p>}
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      {/* Vista Móvil (Tarjetas) */}
+      <div className="grid grid-cols-1 gap-4 md:hidden">
+        {productos.map((p) => (
+          <div key={p.id} className="bg-white rounded-xl p-4 shadow-sm flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              {p.imagenUrl ? (
+                <img
+                  src={p.imagenUrl}
+                  alt={p.nombre}
+                  className="w-14 h-14 object-cover rounded-lg flex-shrink-0"
+                />
+              ) : (
+                <div className="w-14 h-14 bg-taupe/20 rounded-lg flex-shrink-0 flex items-center justify-center text-xs text-[#6B5560]">
+                  Sin foto
+                </div>
+              )}
+              <div className="min-w-0">
+                <p className="font-medium text-sm text-[#3D2C33] truncate">{p.nombre}</p>
+                <p className="text-xs text-[#6B5560]">{p.categoria?.nombre ?? 'Sin categoría'}</p>
+                <p className="text-xs font-semibold text-mauve-dark mt-0.5">
+                  Bs {p.precio.toFixed(2)} • {p.disponible ? 'Disponible' : 'No disponible'}
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 text-right">
+              <Link to={`/admin/productos/${p.id}/editar`} className="text-xs font-medium text-mauve hover:underline">
+                Editar
+              </Link>
+              <button onClick={() => handleEliminar(p)} className="text-xs font-medium text-red-600 hover:underline">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Vista Escritorio (Tabla) */}
+      <div className="hidden md:block bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-cream text-left text-[#3D2C33]">
             <tr>
               <th className="p-3">Foto</th>
               <th className="p-3">Nombre</th>
               <th className="p-3">Categoría</th>
-              <th className="p-3">Precio</th>
+              <th className="p-3">Precio (Bs)</th>
               <th className="p-3">Disponible</th>
               <th className="p-3"></th>
             </tr>
@@ -77,7 +114,7 @@ export default function AdminProductos() {
                 </td>
                 <td className="p-3">{p.nombre}</td>
                 <td className="p-3">{p.categoria?.nombre ?? '—'}</td>
-                <td className="p-3">${p.precio.toFixed(2)}</td>
+                <td className="p-3">Bs {p.precio.toFixed(2)}</td>
                 <td className="p-3">{p.disponible ? 'Sí' : 'No'}</td>
                 <td className="p-3 text-right space-x-3">
                   <Link to={`/admin/productos/${p.id}/editar`} className="text-mauve hover:underline">

@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Models;
+using Backend.DTOs;
 
 namespace Backend.Controllers
 {
@@ -11,62 +13,92 @@ namespace Backend.Controllers
     public class CategoriasController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
+        private const string CategoriasCacheKey = "categorias_all";
 
-        public CategoriasController(ApplicationDbContext context)
+        public CategoriasController(ApplicationDbContext context, IMemoryCache cache)
         {
             _context = context;
+            _cache = cache;
         }
+
+        private static CategoriaResponseDto MapToDto(Categoria c) => new(c.Id, c.Nombre, c.Descripcion);
 
         // GET: api/categorias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Categoria>>> GetCategorias()
+        public async Task<ActionResult<IEnumerable<CategoriaResponseDto>>> GetCategorias()
         {
-            return await _context.Categorias.AsNoTracking().ToListAsync();
+            if (_cache.TryGetValue(CategoriasCacheKey, out List<CategoriaResponseDto>? categoriasCached) && categoriasCached != null)
+            {
+                return categoriasCached;
+            }
+
+            var categorias = await _context.Categorias
+                .AsNoTracking()
+                .Select(c => MapToDto(c))
+                .ToListAsync();
+
+            var cacheOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(TimeSpan.FromMinutes(5))
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+
+            _cache.Set(CategoriasCacheKey, categorias, cacheOptions);
+
+            return categorias;
         }
 
         // GET: api/categorias/5
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Categoria>> GetCategoria(int id)
+        public async Task<ActionResult<CategoriaResponseDto>> GetCategoria(int id)
         {
             var categoria = await _context.Categorias.FindAsync(id);
 
             if (categoria == null)
                 return NotFound();
 
-            return categoria;
+            return MapToDto(categoria);
         }
 
         // POST: api/categorias
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Categoria>> PostCategoria(Categoria categoria)
+        public async Task<ActionResult<CategoriaResponseDto>> PostCategoria(CreateCategoriaDto dto)
         {
+            var existeNombre = await _context.Categorias.AnyAsync(c => c.Nombre.ToLower() == dto.Nombre.Trim().ToLower());
+            if (existeNombre)
+                return BadRequest(new { message = "Ya existe una categoría con ese nombre." });
+
+            var categoria = new Categoria
+            {
+                Nombre = dto.Nombre.Trim(),
+                Descripcion = dto.Descripcion?.Trim()
+            };
+
             _context.Categorias.Add(categoria);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCategoria), new { id = categoria.Id }, categoria);
+            _cache.Remove(CategoriasCacheKey);
+
+            return CreatedAtAction(nameof(GetCategoria), new { id = categoria.Id }, MapToDto(categoria));
         }
 
         // PUT: api/categorias/5
         [Authorize]
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutCategoria(int id, Categoria categoria)
+        public async Task<IActionResult> PutCategoria(int id, UpdateCategoriaDto dto)
         {
-            if (id != categoria.Id)
-                return BadRequest();
+            if (id != dto.Id)
+                return BadRequest(new { message = "El ID del parámetro no coincide con el cuerpo." });
 
-            _context.Entry(categoria).State = EntityState.Modified;
+            var categoria = await _context.Categorias.FindAsync(id);
+            if (categoria == null)
+                return NotFound();
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _context.Categorias.AnyAsync(c => c.Id == id))
-                    return NotFound();
-                throw;
-            }
+            categoria.Nombre = dto.Nombre.Trim();
+            categoria.Descripcion = dto.Descripcion?.Trim();
+
+            await _context.SaveChangesAsync();
+            _cache.Remove(CategoriasCacheKey);
 
             return NoContent();
         }
@@ -82,6 +114,8 @@ namespace Backend.Controllers
 
             _context.Categorias.Remove(categoria);
             await _context.SaveChangesAsync();
+
+            _cache.Remove(CategoriasCacheKey);
 
             return NoContent();
         }

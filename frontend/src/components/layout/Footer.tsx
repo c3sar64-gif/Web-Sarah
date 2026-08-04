@@ -9,9 +9,9 @@ export default function Footer() {
           </p>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <a
-            href="https://wa.me/521234567890"
+            href="https://wa.me/59176442752"
             target="_blank"
             rel="noreferrer"
             className="text-cream text-sm border border-cream/35 rounded-full px-5 py-2.5 hover:bg-cream/10 transition-colors"
@@ -25,6 +25,22 @@ export default function Footer() {
             className="text-cream text-sm border border-cream/35 rounded-full px-5 py-2.5 hover:bg-cream/10 transition-colors"
           >
             Instagram
+          </a>
+          <a
+            href="https://www.facebook.com/profile.php?id=61586846324993"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cream text-sm border border-cream/35 rounded-full px-5 py-2.5 hover:bg-cream/10 transition-colors"
+          >
+            Facebook
+          </a>
+          <a
+            href="https://www.tiktok.com/@roxanaantezanamej"
+            target="_blank"
+            rel="noreferrer"
+            className="text-cream text-sm border border-cream/35 rounded-full px-5 py-2.5 hover:bg-cream/10 transition-colors"
+          >
+            TikTok
           </a>
         </div>
       </div>

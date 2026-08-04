@@ -1,6 +1,6 @@
 import { useCart } from '../context/CartContext'
 
-const WHATSAPP_NUMBER = '521234567890'
+const WHATSAPP_NUMBER = '59176442752'
 const PLACEHOLDER_IMG = 'https://placehold.co/80x80?text=Sin+imagen'
 
 function buildWhatsAppMessage(
@@ -8,14 +8,14 @@ function buildWhatsAppMessage(
   subtotal: number,
 ): string {
   const lineas = items.map(
-    (i) => `• ${i.cantidad}x ${i.product.nombre} — $${(i.product.precio * i.cantidad).toFixed(2)}`,
+    (i) => `• ${i.cantidad}x ${i.product.nombre} — Bs ${(i.product.precio * i.cantidad).toFixed(2)}`,
   )
   return [
     'Hola Sarah, quiero hacer este pedido:',
     '',
     ...lineas,
     '',
-    `Total: $${subtotal.toFixed(2)}`,
+    `Total: Bs ${subtotal.toFixed(2)}`,
   ].join('\n')
 }
 
@@ -71,7 +71,7 @@ export default function CartDrawer() {
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-sm truncate">{item.product.nombre}</p>
                 <p className="text-sm text-mauve-dark font-semibold">
-                  ${item.product.precio.toFixed(2)}
+                  Bs {item.product.precio.toFixed(2)}
                 </p>
               </div>
               <div className="flex items-center gap-2">
@@ -108,7 +108,7 @@ export default function CartDrawer() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-[#6B5560]">Subtotal</span>
               <span className="font-display text-xl text-mauve-dark">
-                ${subtotal.toFixed(2)}
+                Bs {subtotal.toFixed(2)}
               </span>
             </div>
             <button

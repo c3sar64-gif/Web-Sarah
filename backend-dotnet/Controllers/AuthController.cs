@@ -52,7 +52,13 @@ namespace Backend.Controllers
             }
 
             usuario.IntentosFallidos = 0;
+            var refreshToken = _jwtService.GenerateRefreshToken();
+            usuario.RefreshToken = refreshToken;
+            usuario.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
             await _context.SaveChangesAsync();
+
+            SetRefreshTokenCookie(refreshToken);
 
             var token = _jwtService.GenerateToken(usuario);
             return new AuthResponse(token, usuario.Nombre, usuario.Email);
@@ -87,10 +93,70 @@ namespace Backend.Controllers
             // Login exitoso con Google desbloquea la cuenta (ver spec: auto-desbloqueo).
             usuario.IntentosFallidos = 0;
             usuario.Bloqueado = false;
+            var refreshToken = _jwtService.GenerateRefreshToken();
+            usuario.RefreshToken = refreshToken;
+            usuario.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+
             await _context.SaveChangesAsync();
+
+            SetRefreshTokenCookie(refreshToken);
 
             var token = _jwtService.GenerateToken(usuario);
             return new AuthResponse(token, usuario.Nombre, usuario.Email);
+        }
+
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<AuthResponse>> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            if (string.IsNullOrEmpty(refreshToken))
+                return Unauthorized(new { message = "No se recibió el token de refresco." });
+
+            var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+            if (usuario == null || usuario.RefreshTokenExpiryTime <= DateTime.UtcNow || usuario.Bloqueado)
+                return Unauthorized(new { message = "Token de refresco inválido o expirado." });
+
+            var newAccessToken = _jwtService.GenerateToken(usuario);
+            var newRefreshToken = _jwtService.GenerateRefreshToken();
+
+            usuario.RefreshToken = newRefreshToken;
+            usuario.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+            await _context.SaveChangesAsync();
+
+            SetRefreshTokenCookie(newRefreshToken);
+
+            return new AuthResponse(newAccessToken, usuario.Nombre, usuario.Email);
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            if (!string.IsNullOrEmpty(refreshToken))
+            {
+                var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+                if (usuario != null)
+                {
+                    usuario.RefreshToken = null;
+                    usuario.RefreshTokenExpiryTime = null;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            Response.Cookies.Delete("refreshToken");
+            return Ok(new { message = "Sesión cerrada correctamente." });
+        }
+
+        private void SetRefreshTokenCookie(string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }
     }
 }

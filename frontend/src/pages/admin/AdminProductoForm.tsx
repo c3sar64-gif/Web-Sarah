@@ -122,7 +122,7 @@ export default function AdminProductoForm() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-[#3D2C33] mb-1">Precio</label>
+          <label className="block text-sm font-medium text-[#3D2C33] mb-1">Precio (Bs)</label>
           <input
             type="number"
             step="0.01"

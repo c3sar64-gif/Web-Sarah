@@ -33,11 +33,19 @@ namespace Backend.Services
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(7),
+                expires: DateTime.UtcNow.AddMinutes(15),
                 signingCredentials: credentials
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using var rng = System.Security.Cryptography.RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
     }
 }
