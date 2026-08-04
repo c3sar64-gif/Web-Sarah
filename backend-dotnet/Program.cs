@@ -48,20 +48,27 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-// CORS -> permite que el frontend en React (Vite) consuma la API
+// CORS -> permite que el frontend en React (Vite / Cloudflare Pages) consuma la API
 const string FrontendCorsPolicy = "FrontendCorsPolicy";
-var allowedOrigins = builder.Configuration
-    .GetSection("Cors:AllowedOrigins")
-    .Get<string[]>() ?? new[] { "http://localhost:5173" };
+var defaultOrigins = new[] { "http://localhost:5173", "https://web-sarah.pages.dev" };
+var configOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
+var envOrigins = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS")?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+var allowedOrigins = envOrigins ?? configOrigins ?? defaultOrigins;
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendCorsPolicy, policy =>
     {
-        policy.WithOrigins(allowedOrigins)
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.SetIsOriginAllowed(origin =>
+        {
+            if (string.IsNullOrWhiteSpace(origin)) return false;
+            if (origin.StartsWith("http://localhost:") || origin.StartsWith("https://localhost:")) return true;
+            if (origin.EndsWith(".pages.dev") || origin.EndsWith(".up.railway.app")) return true;
+            return allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase);
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
