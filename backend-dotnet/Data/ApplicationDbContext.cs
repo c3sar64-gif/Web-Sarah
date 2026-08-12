@@ -14,6 +14,8 @@ namespace Backend.Data
         public DbSet<Producto> Productos => Set<Producto>();
         public DbSet<MensajeContacto> MensajesContacto => Set<MensajeContacto>();
         public DbSet<Usuario> Usuarios => Set<Usuario>();
+        public DbSet<Orden> Ordenes => Set<Orden>();
+        public DbSet<OrdenDetalle> OrdenDetalles => Set<OrdenDetalle>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +46,22 @@ namespace Backend.Data
             {
                 entity.ToTable("usuarios");
                 entity.HasIndex(u => u.Email).IsUnique();
+            });
+
+            modelBuilder.Entity<Orden>(entity =>
+            {
+                entity.ToTable("ordenes");
+                entity.HasIndex(o => o.CodigoOrden).IsUnique();
+
+                entity.HasMany(o => o.Detalles)
+                    .WithOne(d => d.Orden)
+                    .HasForeignKey(d => d.OrdenId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<OrdenDetalle>(entity =>
+            {
+                entity.ToTable("orden_detalles");
             });
         }
     }

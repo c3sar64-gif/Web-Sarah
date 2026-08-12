@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
 const WHATSAPP_NUMBER = '59176442752'
@@ -21,14 +22,21 @@ function buildWhatsAppMessage(
 
 export default function CartDrawer() {
   const { items, isOpen, closeCart, updateQuantity, removeItem, subtotal, clearCart } = useCart()
+  const navigate = useNavigate()
 
   if (!isOpen) return null
 
-  const handleCheckout = () => {
+  const handleWhatsApp = () => {
     const mensaje = buildWhatsAppMessage(items, subtotal)
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`
     window.open(url, '_blank', 'noreferrer')
   }
+
+  const handleGoToCheckout = () => {
+    closeCart()
+    navigate('/checkout')
+  }
+
 
   return (
     <div className="fixed inset-0 z-[60] flex justify-end">
@@ -113,15 +121,22 @@ export default function CartDrawer() {
             </div>
             <button
               type="button"
-              onClick={handleCheckout}
-              className="w-full rounded-full bg-sage hover:bg-sage-dark text-white font-medium px-6 py-3 transition-colors"
+              onClick={handleGoToCheckout}
+              className="w-full rounded-full bg-rose-metallic hover:bg-rose-metallic-dark text-white font-medium px-6 py-3.5 transition-colors shadow-sm text-sm"
             >
-              Enviar pedido por WhatsApp
+              Proceder al Pago (Checkout)
+            </button>
+            <button
+              type="button"
+              onClick={handleWhatsApp}
+              className="w-full rounded-full border border-taupe hover:bg-taupe/15 text-[#3D2C33] font-medium px-6 py-2.5 transition-colors text-xs"
+            >
+              Consultar por WhatsApp
             </button>
             <button
               type="button"
               onClick={clearCart}
-              className="w-full text-xs text-[#A99C8E] hover:text-[#B5564A] transition-colors"
+              className="w-full text-xs text-[#A99C8E] hover:text-[#B5564A] transition-colors mt-1"
             >
               Vaciar carrito
             </button>
