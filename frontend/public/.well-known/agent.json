@@ -1,0 +1,19 @@
+{
+  "name": "Sarah Bakery Agent Interface",
+  "description": "Repostería artesanal en Cochabamba con pedidos en línea y pago por QR Simple BNB.",
+  "url": "https://web-sarah.vercel.app",
+  "version": "1.0.0",
+  "capabilities": {
+    "ordering": true,
+    "delivery_zones": [
+      "Cercado Centro",
+      "Cercado Norte",
+      "Cercado Sur",
+      "Tiquipaya",
+      "Sacaba",
+      "Quillacollo",
+      "Colcapirhua"
+    ],
+    "payment_methods": ["QR_SIMPLE", "TRANSFER_BANK"]
+  }
+}

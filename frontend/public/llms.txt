@@ -1,0 +1,21 @@
+# Sarah — Horneado con Amor
+
+> Repostería Artesanal en Cochabamba, Bolivia 🇧🇴. Tortas, galletas, pies y queques elaborados con ingredientes de primera calidad.
+
+## Información General
+- **Ciudad / Cobertura**: Cochabamba (Cercado Centro, Cercado Norte, Cercado Sur, Tiquipaya, Sacaba, Quillacollo, Colcapirhua)
+- **Tiempo de Horneado**: Mínimo 48 horas de anticipación
+- **Horario de Entrega**: Tardes de 17:00 a 21:00
+- **Métodos de Pago**: QR Simple (BNB / Todos los bancos en Bolivia), Transferencia Directa
+
+## Catálogo de Productos y Precios
+- **Pie de Limón**: 85.00 Bs
+- **Queque Tradicional**: 70.00 Bs
+- **Galletas Artesanales**: 35.00 Bs / caja
+- **Torta Especial de la Casa**: 120.00 Bs
+
+## Enlaces Directos
+- [Página Principal](https://web-sarah.vercel.app/)
+- [Catálogo de Especialidades](https://web-sarah.vercel.app/especialidades)
+- [Realizar Pedido / Checkout](https://web-sarah.vercel.app/checkout)
+- [Contacto / WhatsApp](https://web-sarah.vercel.app/contacto)
