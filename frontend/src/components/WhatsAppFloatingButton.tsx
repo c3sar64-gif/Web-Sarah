@@ -3,7 +3,7 @@ import { MessageCircle, X, Cake, MapPin, ShoppingBag, Send } from 'lucide-react'
 
 export default function WhatsAppFloatingButton() {
   const [isOpen, setIsOpen] = useState(false)
-  const phone = '59171499575'
+  const phone = '59176442752'
 
   const quickMessages = [
     {
@@ -91,7 +91,7 @@ export default function WhatsAppFloatingButton() {
             </div>
 
             <button
-              onClick={() => handleOpenWhatsApp('¡Hola Sarah! Me gustaría hacer una consulta.')}
+              onClick={() => handleOpenWhatsApp('¡Hola Sarah! Me gustaría consultar sobre sus postres y realizar un pedido.')}
               className="w-full mt-3 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-2 shadow-xs"
             >
               <MessageCircle className="w-4 h-4" />

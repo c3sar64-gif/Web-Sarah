@@ -37,7 +37,7 @@ export const SOCIAL_NETWORKS: SocialNetwork[] = [
     id: 'whatsapp',
     name: 'WhatsApp',
     handle: '+591 76442752',
-    url: 'https://wa.me/59176442752?text=' + encodeURIComponent('¡Hola Sarah! Me comunico desde la página web sarah-horneado-con-amor.com. Me gustaría consultar sobre sus postres y realizar un pedido.'),
+    url: 'https://wa.me/59176442752?text=' + encodeURIComponent('¡Hola Sarah! Me gustaría consultar sobre sus postres y realizar un pedido.'),
     description: 'Haz tus pedidos directo, realiza consultas sobre presupuestos o coordina la entrega de tus tortas por WhatsApp.',
     ctaText: 'Escribir por WhatsApp',
     brandColor: '#25D366',
