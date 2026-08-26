@@ -1,0 +1,6 @@
+/*
+  Link: </.well-known/agent.json>; rel="agent", </llms.txt>; rel="describedby", </sitemap.xml>; rel="sitemap", </robots.txt>; rel="robots"
+  X-Robots-Tag: index, follow
+
+/api/*
+  Link: </.well-known/api-catalog>; rel="api-catalog"

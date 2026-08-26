@@ -1,0 +1,26 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</.well-known/agent.json>; rel=\"agent\", </llms.txt>; rel=\"describedby\", </sitemap.xml>; rel=\"sitemap\", </robots.txt>; rel=\"robots\""
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Link",
+          "value": "</.well-known/api-catalog>; rel=\"api-catalog\""
+        }
+      ]
+    }
+  ]
+}
