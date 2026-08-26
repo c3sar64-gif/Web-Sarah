@@ -221,6 +221,7 @@ export async function onRequest(context: {
         status: 200,
         headers: {
           'Content-Type': 'text/markdown; charset=utf-8',
+          'Link': '</.well-known/oauth-authorization-server>; rel="oauth-authorization-server", </.well-known/oauth-protected-resource>; rel="oauth-protected-resource"',
           'x-markdown-tokens': String(authMd.split(/\s+/).length),
           'Vary': 'Accept',
           'Cache-Control': 'public, max-age=3600',
@@ -413,13 +414,14 @@ Authorization: Bearer <access_token>
 - **Registration URI**: https://sarah-horneado-con-amor.com/api/auth/register
 - **Token URI**: https://sarah-horneado-con-amor.com/api/auth/token
 - **Revocation URI**: https://sarah-horneado-con-amor.com/api/auth/revoke
-- **Protected Resource**: https://sarah-horneado-con-amor.com/api/
+- **Claim URI**: https://sarah-horneado-con-amor.com/api/auth/claim
+- **Protected Resource**: https://sarah-horneado-con-amor.com
 - **Authorization Server Metadata**: /.well-known/oauth-authorization-server
 - **Protected Resource Metadata**: /.well-known/oauth-protected-resource
 
 ## Supported Identity and Credential Types
 
-- **Identity Types**: agent, user
+- **Identity Types**: anonymous, identity_assertion, agent, user
 - **Credential Types**: client_secret, bearer_token
 - **Grant Types**: client_credentials, authorization_code, password
 
