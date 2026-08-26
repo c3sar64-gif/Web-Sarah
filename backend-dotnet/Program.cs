@@ -50,7 +50,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // CORS -> permite que el frontend en React (Vite / Cloudflare Pages) consuma la API
 const string FrontendCorsPolicy = "FrontendCorsPolicy";
-var defaultOrigins = new[] { "http://localhost:5173", "https://web-sarah.pages.dev" };
+var defaultOrigins = new[] {
+    "http://localhost:5173",
+    "https://web-sarah.pages.dev",
+    "https://sarah-horneado-con-amor.com",
+    "https://www.sarah-horneado-con-amor.com"
+};
 var configOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>();
 var envOrigins = Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGINS")?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 var allowedOrigins = envOrigins ?? configOrigins ?? defaultOrigins;
@@ -156,6 +161,9 @@ app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
+app.MapGet("/api/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
 app.MapControllers();
 
