@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agentskills.io/schema/v0.2.0/skills-index.json",
+  "skills": [
+    {
+      "name": "sarah-bakery-ordering",
+      "type": "skill",
+      "description": "Consultar menú de repostería artesanal y crear órdenes con entrega en Cochabamba y pago por QR Simple BNB.",
+      "url": "https://sarah-horneado-con-amor.com/.well-known/agent-skills/ordering/SKILL.md",
+      "sha256": "b8b9556cb9a306c43296d3f5134c0ea45a057c77da1e503c6e5082613038d9b0"
+    }
+  ]
+}
