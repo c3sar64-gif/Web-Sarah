@@ -15,7 +15,8 @@
 - **Torta Especial de la Casa**: 120.00 Bs
 
 ## Enlaces Directos
-- [Página Principal](https://web-sarah.vercel.app/)
-- [Catálogo de Especialidades](https://web-sarah.vercel.app/especialidades)
-- [Realizar Pedido / Checkout](https://web-sarah.vercel.app/checkout)
-- [Contacto / WhatsApp](https://web-sarah.vercel.app/contacto)
+- [Página Principal](https://sarah-horneado-con-amor.com/)
+- [Catálogo de Especialidades](https://sarah-horneado-con-amor.com/especialidades)
+- [Realizar Pedido / Checkout](https://sarah-horneado-con-amor.com/checkout)
+- [Contacto / WhatsApp](https://sarah-horneado-con-amor.com/contacto)
+

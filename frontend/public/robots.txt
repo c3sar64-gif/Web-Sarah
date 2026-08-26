@@ -31,5 +31,6 @@ Allow: /
 # ai-input=yes  → Sí se permite que agentes de IA lean el contenido para responder preguntas
 Content-Signal: ai-train=no, search=yes, ai-input=yes
 
-Sitemap: https://web-sarah.vercel.app/sitemap.xml
-LLMs-txt: https://web-sarah.vercel.app/llms.txt
+Sitemap: https://sarah-horneado-con-amor.com/sitemap.xml
+LLMs-txt: https://sarah-horneado-con-amor.com/llms.txt
+
