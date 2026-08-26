@@ -13,7 +13,149 @@ export async function onRequest(context: {
 
   const url = new URL(request.url)
 
-  // Si la petición es para un archivo estático (.txt, .md, .json, .xml, .well-known), dejar que Cloudflare lo sirva directamente
+  // 1. Manejo garantizado de endpoints .well-known con Content-Type y CORS correctos
+  if (url.pathname === '/.well-known/oauth-protected-resource' || url.pathname === '/.well-known/oauth-protected-resource.json' || url.pathname.startsWith('/.well-known/oauth-protected-resource/')) {
+    const data = {
+      resource: 'https://sarah-horneado-con-amor.com/api/',
+      authorization_servers: ['https://sarah-horneado-con-amor.com'],
+      scopes_supported: ['orders:read', 'orders:write', 'products:read'],
+      bearer_methods_supported: ['header'],
+      resource_documentation: 'https://sarah-horneado-con-amor.com/llms.txt',
+    }
+    return new Response(JSON.stringify(data, null, 2), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    })
+  }
+
+  if (url.pathname === '/.well-known/oauth-authorization-server') {
+    const data = {
+      issuer: 'https://sarah-horneado-con-amor.com',
+      authorization_endpoint: 'https://sarah-horneado-con-amor.com/admin/login',
+      token_endpoint: 'https://sarah-horneado-con-amor.com/api/auth/token',
+      registration_endpoint: 'https://sarah-horneado-con-amor.com/api/auth/register',
+      revocation_endpoint: 'https://sarah-horneado-con-amor.com/api/auth/revoke',
+      jwks_uri: 'https://sarah-horneado-con-amor.com/.well-known/jwks.json',
+      response_types_supported: ['code', 'token'],
+      grant_types_supported: ['authorization_code', 'client_credentials', 'password'],
+      subject_types_supported: ['public'],
+      id_token_signing_alg_values_supported: ['RS256', 'HS256'],
+      scopes_supported: ['openid', 'profile', 'email', 'orders:read', 'orders:write'],
+      agent_auth: {
+        register_uri: 'https://sarah-horneado-con-amor.com/api/auth/register',
+        supported_identity_types: ['agent', 'user'],
+        supported_credential_types: ['client_secret', 'bearer_token'],
+        revocation_uri: 'https://sarah-horneado-con-amor.com/api/auth/revoke',
+      },
+      token_endpoint_auth_methods_supported: ['client_secret_post', 'client_secret_basic'],
+    }
+    return new Response(JSON.stringify(data, null, 2), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    })
+  }
+
+  if (url.pathname === '/.well-known/ai-catalog.json' || url.pathname === '/.well-known/ai-catalog') {
+    const data = {
+      specVersion: '1.0',
+      host: {
+        name: 'Sarah — Horneado con Amor',
+        domain: 'sarah-horneado-con-amor.com',
+        description: 'Repostería artesanal en Cochabamba, Bolivia. Tortas, queques, galletas y pies con entrega a domicilio y pagos con QR Simple BNB.',
+      },
+      entries: [
+        {
+          id: 'urn:air:sarah-horneado-con-amor.com:mcp:server-card',
+          displayName: 'Sarah Bakery MCP Server',
+          type: 'application/json',
+          url: 'https://sarah-horneado-con-amor.com/.well-known/mcp/server-card.json',
+          description: 'Servidor Model Context Protocol con herramientas para consultar menú de postres y registrar pedidos en Cochabamba.',
+          representativeQueries: [
+            'consultar precio de pie de limon en cochabamba',
+            'hacer pedido de torta artesanal en cochabamba',
+            'catalogo de repostería sarah bolivia',
+          ],
+        },
+        {
+          id: 'urn:air:sarah-horneado-con-amor.com:openapi:order-api',
+          displayName: 'Sarah Bakery OpenAPI Specification',
+          type: 'application/vnd.oai.openapi+json',
+          url: 'https://sarah-horneado-con-amor.com/api/openapi.json',
+          description: 'Especificación OpenAPI 3.0 para endpoints de catálogo, pedidos y confirmación de pago QR BNB.',
+          representativeQueries: [
+            'api de pedidos de pasteleria',
+            'endpoints de pago qr bolivia',
+            'openapi rest api repostería',
+          ],
+        },
+        {
+          id: 'urn:air:sarah-horneado-con-amor.com:skills:ordering',
+          displayName: 'Sarah Bakery Ordering Skill',
+          type: 'text/markdown',
+          url: 'https://sarah-horneado-con-amor.com/.well-known/agent-skills/ordering/SKILL.md',
+          description: 'Instrucciones de habilidades para agentes autónomos que gestionan órdenes en Cochabamba.',
+          representativeQueries: [
+            'instrucciones de compra para agentes de ia',
+            'reglas de entrega 48 horas cochabamba',
+            'skill de repostería artesanal',
+          ],
+        },
+        {
+          id: 'urn:air:sarah-horneado-con-amor.com:doc:llms',
+          displayName: 'Sarah Bakery LLM Documentation',
+          type: 'text/markdown',
+          url: 'https://sarah-horneado-con-amor.com/llms.txt',
+          description: 'Resumen completo en Markdown del negocio, precios en Bolivianos y horarios de entrega.',
+          representativeQueries: [
+            'información de contacto y whatsapp repostería sarah',
+            'precios de pasteles en bolivianos cochabamba',
+            'zonas de cobertura cercado tiquipaya sacaba',
+          ],
+        },
+      ],
+    }
+    return new Response(JSON.stringify(data, null, 2), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    })
+  }
+
+  if (url.pathname === '/.well-known/agent-skills/index.json' || url.pathname === '/.well-known/agent-skills.json') {
+    const data = {
+      $schema: 'https://agentskills.io/schema/v0.2.0/skills-index.json',
+      skills: [
+        {
+          name: 'sarah-bakery-ordering',
+          type: 'skill',
+          description: 'Consultar menú de repostería artesanal y crear órdenes con entrega en Cochabamba y pago por QR Simple BNB.',
+          url: 'https://sarah-horneado-con-amor.com/.well-known/agent-skills/ordering/SKILL.md',
+          sha256: 'b8b9556cb9a306c43296d3f5134c0ea45a057c77da1e503c6e5082613038d9b0',
+        },
+      ],
+    }
+    return new Response(JSON.stringify(data, null, 2), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Access-Control-Allow-Origin': '*',
+        'Cache-Control': 'public, max-age=3600',
+      },
+    })
+  }
+
+  // 2. Si la petición es para otros archivos estáticos, dejar que Cloudflare los sirva directamente
   if (
     url.pathname.startsWith('/.well-known/') ||
     url.pathname.endsWith('.json') ||
