@@ -11,9 +11,34 @@ export async function onRequest(context: {
   const { request, next } = context
   const acceptHeader = request.headers.get('Accept') || ''
 
-  // Si el cliente acepta markdown (agente de IA), servimos llms.txt o markdown
+  const url = new URL(request.url)
+
+  // Si la petición es para un archivo estático (.txt, .md, .json, .xml, .well-known), dejar que Cloudflare lo sirva directamente
+  if (
+    url.pathname.startsWith('/.well-known/') ||
+    url.pathname.endsWith('.json') ||
+    url.pathname.endsWith('.xml') ||
+    url.pathname.endsWith('.txt') ||
+    url.pathname.startsWith('/api/')
+  ) {
+    return next()
+  }
+
+  // Si el cliente acepta markdown (agente de IA), servimos la versión Markdown correspondiente
   if (acceptHeader.includes('text/markdown') || acceptHeader.includes('text/plain')) {
-    const url = new URL(request.url)
+    // Si solicita directamente /auth.md
+    if (url.pathname === '/auth.md') {
+      const authMd = getAuthMarkdown()
+      return new Response(authMd, {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/markdown; charset=utf-8',
+          'x-markdown-tokens': String(authMd.split(/\s+/).length),
+          'Vary': 'Accept',
+          'Cache-Control': 'public, max-age=3600',
+        },
+      })
+    }
 
     // Mapa de rutas a contenido Markdown
     const markdownContent: Record<string, string> = {
@@ -21,6 +46,7 @@ export async function onRequest(context: {
       '/especialidades': getEspecialidadesMarkdown(),
       '/contacto': getContactoMarkdown(),
       '/checkout': getCheckoutMarkdown(),
+      '/auth.md': getAuthMarkdown(),
     }
 
     const markdown = markdownContent[url.pathname] ?? getHomepageMarkdown()
@@ -148,3 +174,38 @@ function getCheckoutMarkdown(): string {
 - **N° Cuenta**: 3502655964
 `
 }
+
+function getAuthMarkdown(): string {
+  return `# Auth.md
+
+> Autenticación y Registro de Agentes de Inteligencia Artificial para Sarah — Horneado con Amor API.
+
+## Información de Autenticación para Agentes
+
+Sarah Bakery proporciona acceso seguro a sus APIs de catálogo, pedidos y seguimiento de entregas para agentes autónomos y clientes autorizados.
+
+### Endpoints de Autorización
+- **Servidor de Autorización (Issuer)**: https://sarah-horneado-con-amor.com
+- **Registro de Agentes (Registration URI)**: https://sarah-horneado-con-amor.com/api/auth/register
+- **Obtención de Token (Token URI)**: https://sarah-horneado-con-amor.com/api/auth/token
+- **Revocación de Token (Revocation URI)**: https://sarah-horneado-con-amor.com/api/auth/revoke
+- **Recurso Protegido (Resource URI)**: https://sarah-horneado-con-amor.com/api/
+
+### Tipos de Identidad y Credenciales Admitidos
+- **Identity Types**: agent, user
+- **Credential Types**: client_secret, bearer_token
+- **Grant Types**: authorization_code, client_credentials, password
+
+### Permisos (Scopes)
+- orders:read: Consulta del estado de pedidos y tickets de compra.
+- orders:write: Creación y confirmación de nuevas órdenes en Cochabamba.
+- products:read: Lectura del catálogo de postres, tortas y precios en Bs.
+
+### Documentación Adicional
+- [Catálogo para LLMs](/llms.txt)
+- [Manifiesto de Agente (agent.json)](/.well-known/agent.json)
+- [Catálogo de APIs RFC 9727](/.well-known/api-catalog)
+- [Especificación OpenAPI 3.0](/api/openapi.json)
+`
+}
+
