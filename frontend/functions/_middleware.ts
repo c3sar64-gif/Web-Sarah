@@ -32,24 +32,31 @@ export async function onRequest(context: {
     })
   }
 
-  if (url.pathname === '/.well-known/oauth-authorization-server') {
+  if (url.pathname === '/.well-known/oauth-authorization-server' || url.pathname === '/.well-known/openid-configuration') {
     const data = {
       issuer: 'https://sarah-horneado-con-amor.com',
       authorization_endpoint: 'https://sarah-horneado-con-amor.com/admin/login',
       token_endpoint: 'https://sarah-horneado-con-amor.com/api/auth/token',
+      userinfo_endpoint: 'https://sarah-horneado-con-amor.com/api/auth/userinfo',
       registration_endpoint: 'https://sarah-horneado-con-amor.com/api/auth/register',
       revocation_endpoint: 'https://sarah-horneado-con-amor.com/api/auth/revoke',
       jwks_uri: 'https://sarah-horneado-con-amor.com/.well-known/jwks.json',
-      response_types_supported: ['code', 'token'],
+      response_types_supported: ['code', 'token', 'id_token'],
       grant_types_supported: ['authorization_code', 'client_credentials', 'password'],
       subject_types_supported: ['public'],
       id_token_signing_alg_values_supported: ['RS256', 'HS256'],
       scopes_supported: ['openid', 'profile', 'email', 'orders:read', 'orders:write'],
       agent_auth: {
         register_uri: 'https://sarah-horneado-con-amor.com/api/auth/register',
+        register_url: 'https://sarah-horneado-con-amor.com/api/auth/register',
         supported_identity_types: ['agent', 'user'],
+        identity_types_supported: ['agent', 'user'],
         supported_credential_types: ['client_secret', 'bearer_token'],
+        credential_types_supported: ['client_secret', 'bearer_token'],
+        claim_uri: 'https://sarah-horneado-con-amor.com/api/auth/claim',
+        claim_url: 'https://sarah-horneado-con-amor.com/api/auth/claim',
         revocation_uri: 'https://sarah-horneado-con-amor.com/api/auth/revoke',
+        revocation_url: 'https://sarah-horneado-con-amor.com/api/auth/revoke',
       },
       token_endpoint_auth_methods_supported: ['client_secret_post', 'client_secret_basic'],
     }
