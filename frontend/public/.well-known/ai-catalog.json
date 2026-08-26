@@ -1,0 +1,58 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "name": "Sarah — Horneado con Amor",
+    "domain": "sarah-horneado-con-amor.com",
+    "description": "Repostería artesanal en Cochabamba, Bolivia. Tortas, queques, galletas y pies con entrega a domicilio y pagos con QR Simple BNB."
+  },
+  "entries": [
+    {
+      "id": "urn:air:sarah-horneado-con-amor.com:mcp:server-card",
+      "displayName": "Sarah Bakery MCP Server",
+      "type": "application/json",
+      "url": "https://sarah-horneado-con-amor.com/.well-known/mcp/server-card.json",
+      "description": "Servidor Model Context Protocol con herramientas para consultar menú de postres y registrar pedidos en Cochabamba.",
+      "representativeQueries": [
+        "consultar precio de pie de limon en cochabamba",
+        "hacer pedido de torta artesanal en cochabamba",
+        "catalogo de repostería sarah bolivia"
+      ]
+    },
+    {
+      "id": "urn:air:sarah-horneado-con-amor.com:openapi:order-api",
+      "displayName": "Sarah Bakery OpenAPI Specification",
+      "type": "application/vnd.oai.openapi+json",
+      "url": "https://sarah-horneado-con-amor.com/api/openapi.json",
+      "description": "Especificación OpenAPI 3.0 para endpoints de catálogo, pedidos y confirmación de pago QR BNB.",
+      "representativeQueries": [
+        "api de pedidos de pasteleria",
+        "endpoints de pago qr bolivia",
+        "openapi rest api repostería"
+      ]
+    },
+    {
+      "id": "urn:air:sarah-horneado-con-amor.com:skills:ordering",
+      "displayName": "Sarah Bakery Ordering Skill",
+      "type": "text/markdown",
+      "url": "https://sarah-horneado-con-amor.com/.well-known/agent-skills/ordering/SKILL.md",
+      "description": "Instrucciones de habilidades para agentes autónomos que gestionan órdenes en Cochabamba.",
+      "representativeQueries": [
+        "instrucciones de compra para agentes de ia",
+        "reglas de entrega 48 horas cochabamba",
+        "skill de repostería artesanal"
+      ]
+    },
+    {
+      "id": "urn:air:sarah-horneado-con-amor.com:doc:llms",
+      "displayName": "Sarah Bakery LLM Documentation",
+      "type": "text/markdown",
+      "url": "https://sarah-horneado-con-amor.com/llms.txt",
+      "description": "Resumen completo en Markdown del negocio, precios en Bolivianos y horarios de entrega.",
+      "representativeQueries": [
+        "información de contacto y whatsapp repostería sarah",
+        "precios de pasteles en bolivianos cochabamba",
+        "zonas de cobertura cercado tiquipaya sacaba"
+      ]
+    }
+  ]
+}
