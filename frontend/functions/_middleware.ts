@@ -73,6 +73,7 @@ export async function onRequest(context: {
       },
       entries: [
         {
+          identifier: 'urn:air:sarah-horneado-con-amor.com:mcp:server-card',
           id: 'urn:air:sarah-horneado-con-amor.com:mcp:server-card',
           displayName: 'Sarah Bakery MCP Server',
           type: 'application/json',
@@ -85,6 +86,7 @@ export async function onRequest(context: {
           ],
         },
         {
+          identifier: 'urn:air:sarah-horneado-con-amor.com:openapi:order-api',
           id: 'urn:air:sarah-horneado-con-amor.com:openapi:order-api',
           displayName: 'Sarah Bakery OpenAPI Specification',
           type: 'application/vnd.oai.openapi+json',
@@ -97,6 +99,7 @@ export async function onRequest(context: {
           ],
         },
         {
+          identifier: 'urn:air:sarah-horneado-con-amor.com:skills:ordering',
           id: 'urn:air:sarah-horneado-con-amor.com:skills:ordering',
           displayName: 'Sarah Bakery Ordering Skill',
           type: 'text/markdown',
@@ -109,6 +112,7 @@ export async function onRequest(context: {
           ],
         },
         {
+          identifier: 'urn:air:sarah-horneado-con-amor.com:doc:llms',
           id: 'urn:air:sarah-horneado-con-amor.com:doc:llms',
           displayName: 'Sarah Bakery LLM Documentation',
           type: 'text/markdown',
