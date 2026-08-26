@@ -50,14 +50,48 @@ export async function onRequest(context: {
         skill: 'https://sarah-horneado-con-amor.com/.well-known/agent-skills/ordering/SKILL.md',
         register_uri: 'https://sarah-horneado-con-amor.com/api/auth/register',
         register_url: 'https://sarah-horneado-con-amor.com/api/auth/register',
-        supported_identity_types: ['agent', 'user'],
-        identity_types_supported: ['agent', 'user'],
-        supported_credential_types: ['client_secret', 'bearer_token'],
-        credential_types_supported: ['client_secret', 'bearer_token'],
         claim_uri: 'https://sarah-horneado-con-amor.com/api/auth/claim',
         claim_url: 'https://sarah-horneado-con-amor.com/api/auth/claim',
         revocation_uri: 'https://sarah-horneado-con-amor.com/api/auth/revoke',
         revocation_url: 'https://sarah-horneado-con-amor.com/api/auth/revoke',
+        supported_identity_types: [
+          'anonymous',
+          'identity_assertion',
+          'agent',
+          'user',
+        ],
+        identity_types_supported: [
+          'anonymous',
+          'identity_assertion',
+          'agent',
+          'user',
+        ],
+        supported_credential_types: [
+          'client_secret',
+          'bearer_token',
+        ],
+        credential_types_supported: [
+          'client_secret',
+          'bearer_token',
+        ],
+        anonymous: {
+          credential_types_supported: [
+            'client_secret',
+            'bearer_token',
+          ],
+          claim_uri: 'https://sarah-horneado-con-amor.com/api/auth/claim',
+        },
+        identity_assertion: {
+          assertion_types_supported: [
+            'urn:ietf:params:oauth:token-type:id-jag',
+            'verified_email',
+          ],
+          credential_types_supported: [
+            'client_secret',
+            'bearer_token',
+          ],
+          claim_uri: 'https://sarah-horneado-con-amor.com/api/auth/claim',
+        },
       },
       token_endpoint_auth_methods_supported: ['client_secret_post', 'client_secret_basic'],
     }
