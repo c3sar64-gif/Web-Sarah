@@ -20,6 +20,89 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- WebMCP (W3C / Chrome Early Preview) para Agentes de IA en el Navegador -->
+    <script type="module">
+      const catalogTool = {
+        name: "get_pastry_catalog",
+        description: "Obtiene el catálogo de tortas, queques, pies y galletas de Sarah Bakery con precios en Bolivianos (Bs) y zonas de entrega en Cochabamba.",
+        inputSchema: {
+          type: "object",
+          properties: {}
+        },
+        execute: async () => ({
+          tienda: "Sarah — Horneado con Amor",
+          ciudad: "Cochabamba, Bolivia",
+          productos: [
+            { nombre: "Pie de Limón", precioBs: 85.0 },
+            { nombre: "Queque Tradicional", precioBs: 70.0 },
+            { nombre: "Galletas Artesanales", precioBs: 35.0 },
+            { nombre: "Torta Especial de la Casa", precioBs: 120.0 }
+          ],
+          zonasEntrega: [
+            "Cercado Centro", "Cercado Norte", "Cercado Sur",
+            "Tiquipaya", "Sacaba", "Quillacollo", "Colcapirhua"
+          ],
+          reglasEntrega: "Mínimo 48 horas de anticipación. Entregas de 17:00 a 21:00.",
+          pago: "QR Simple BNB a nombre de Roxana Antezana (Cuenta 3502655964)"
+        })
+      };
+
+      const coverageTool = {
+        name: "check_delivery_coverage",
+        description: "Verifica si una zona o municipio de Cochabamba tiene cobertura para entrega de pedidos.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            zona: {
+              type: "string",
+              description: "Nombre de la zona o municipio en Cochabamba (ej. Tiquipaya, Cercado Norte, Sacaba)"
+            }
+          },
+          required: ["zona"]
+        },
+        execute: async ({ zona } = {}) => {
+          const validZones = [
+            "cercado centro", "cercado norte", "cercado sur",
+            "tiquipaya", "sacaba", "quillacollo", "colcapirhua"
+          ];
+          const query = (zona || "").toLowerCase();
+          const match = validZones.some(z => query.includes(z) || z.includes(query));
+          return {
+            zonaConsultada: zona,
+            coberturaDisponible: match,
+            mensaje: match
+              ? `La zona ${zona} cuenta con cobertura para entregas de 17:00 a 21:00 con 48h de anticipación.`
+              : `La zona ${zona} requiere coordinar entrega especial por WhatsApp (71499575).`
+          };
+        }
+      };
+
+      function initWebMCP() {
+        if (typeof navigator !== "undefined" && "modelContext" in navigator && navigator.modelContext) {
+          try {
+            if (typeof navigator.modelContext.registerTool === "function") {
+              navigator.modelContext.registerTool(catalogTool);
+              navigator.modelContext.registerTool(coverageTool);
+            }
+            if (typeof navigator.modelContext.provideContext === "function") {
+              navigator.modelContext.provideContext({
+                tools: [catalogTool, coverageTool]
+              });
+            }
+          } catch (err) {
+            console.warn("WebMCP registration warning:", err);
+          }
+        }
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initWebMCP);
+      } else {
+        initWebMCP();
+      }
+    </script>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
