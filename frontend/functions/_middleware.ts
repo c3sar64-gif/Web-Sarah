@@ -295,7 +295,7 @@ Cercado Centro, Cercado Norte, Cercado Sur, Tiquipaya, Sacaba, Quillacollo, Colc
 - **Pago**: QR Simple BNB (todos los bancos de Bolivia)
 
 ## Contacto
-- WhatsApp: 71499575
+- WhatsApp: 76442752
 - Facebook: https://www.facebook.com/share/1MTK9zJWmr/
 
 ## Realizar un Pedido
@@ -321,7 +321,7 @@ Elaboradas con ingredientes frescos y de primera calidad. Disponibles en múltip
 - **Galletas Artesanales**: Bs 35.00/caja — Surtido de sabores artesanales.
 
 ## Pedidos Personalizados
-Contáctanos por WhatsApp (71499575) para tortas y postres personalizados para eventos especiales.
+Contáctanos por WhatsApp (76442752) para tortas y postres personalizados para eventos especiales.
 `
 }
 
@@ -329,7 +329,7 @@ function getContactoMarkdown(): string {
   return `# Contacto — Sarah Horneado con Amor
 
 ## Información de Contacto
-- **WhatsApp**: 71499575
+- **WhatsApp**: 76442752
 - **Facebook**: https://www.facebook.com/share/1MTK9zJWmr/
 - **Correo**: sarahhorneadoconamor@gmail.com
 

@@ -26,7 +26,7 @@ export default function TrustBadges() {
     {
       icon: MessageCircle,
       title: 'Atención Personalizada',
-      desc: 'Confirmación y soporte directo por WhatsApp (71499575)',
+      desc: 'Confirmación y soporte directo por WhatsApp (76442752)',
       color: 'bg-sky-50 text-sky-800 border-sky-200/60',
       iconColor: 'text-sky-600',
     },
