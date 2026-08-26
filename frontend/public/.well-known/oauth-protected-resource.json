@@ -1,0 +1,15 @@
+{
+  "resource": "https://sarah-horneado-con-amor.com/api/",
+  "authorization_servers": [
+    "https://sarah-horneado-con-amor.com"
+  ],
+  "scopes_supported": [
+    "orders:read",
+    "orders:write",
+    "products:read"
+  ],
+  "bearer_methods_supported": [
+    "header"
+  ],
+  "resource_documentation": "https://sarah-horneado-con-amor.com/llms.txt"
+}
