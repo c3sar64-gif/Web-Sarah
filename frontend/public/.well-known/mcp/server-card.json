@@ -1,0 +1,79 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card.json",
+  "serverInfo": {
+    "name": "sarah-bakery-mcp",
+    "title": "Sarah Bakery MCP Server",
+    "version": "1.0.0",
+    "description": "Servidor Model Context Protocol (MCP) para consultar catálogo de repostería artesanal, verificar cobertura en Cochabamba y generar pedidos en Sarah — Horneado con Amor."
+  },
+  "transport": {
+    "type": "sse",
+    "endpoint": "https://sarah-horneado-con-amor.com/api/mcp/sse"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    },
+    "resources": {
+      "subscribe": false,
+      "listChanged": false
+    },
+    "prompts": {
+      "listChanged": false
+    }
+  },
+  "tools": [
+    {
+      "name": "get_menu",
+      "description": "Obtiene el catálogo completo de tortas, queques, galletas y pies con precios en Bolivianos (Bs).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "create_order",
+      "description": "Crea una nueva orden de pedido con entrega a domicilio programada en Cochabamba y pago por QR Simple BNB.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "clienteNombre": {
+            "type": "string",
+            "description": "Nombre completo del cliente"
+          },
+          "clienteTelefono": {
+            "type": "string",
+            "description": "Teléfono celular de contacto para la entrega"
+          },
+          "zona": {
+            "type": "string",
+            "enum": [
+              "Cercado Centro",
+              "Cercado Norte",
+              "Cercado Sur",
+              "Tiquipaya",
+              "Sacaba",
+              "Quillacollo",
+              "Colcapirhua"
+            ]
+          },
+          "direccion": {
+            "type": "string",
+            "description": "Dirección exacta de entrega"
+          },
+          "fechaEntrega": {
+            "type": "string",
+            "description": "Fecha de entrega programada (mínimo 48h de anticipación)"
+          }
+        },
+        "required": [
+          "clienteNombre",
+          "clienteTelefono",
+          "zona",
+          "direccion",
+          "fechaEntrega"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card.json",
+  "serverInfo": {
+    "name": "sarah-bakery-mcp",
+    "title": "Sarah Bakery MCP Server",
+    "version": "1.0.0",
+    "description": "Servidor Model Context Protocol (MCP) para consultar catálogo de repostería artesanal, verificar cobertura en Cochabamba y generar pedidos en Sarah — Horneado con Amor."
+  },
+  "transport": {
+    "type": "sse",
+    "endpoint": "https://sarah-horneado-con-amor.com/api/mcp/sse"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    },
+    "resources": {
+      "subscribe": false,
+      "listChanged": false
+    },
+    "prompts": {
+      "listChanged": false
+    }
+  }
+}

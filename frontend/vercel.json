@@ -5,11 +5,29 @@
       "headers": [
         {
           "key": "Link",
-          "value": "</.well-known/agent.json>; rel=\"agent\", </llms.txt>; rel=\"describedby\", </sitemap.xml>; rel=\"sitemap\", </robots.txt>; rel=\"robots\""
+          "value": "</.well-known/agent.json>; rel=\"agent\", </.well-known/mcp/server-card.json>; rel=\"mcp\", </llms.txt>; rel=\"describedby\", </sitemap.xml>; rel=\"sitemap\", </robots.txt>; rel=\"robots\""
         },
         {
           "key": "X-Robots-Tag",
           "value": "index, follow"
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/mcp/server-card.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/.well-known/mcp.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
         }
       ]
     },
