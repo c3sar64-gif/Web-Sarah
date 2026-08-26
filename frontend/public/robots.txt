@@ -18,5 +18,18 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
+User-agent: Amazonbot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Content Signals (https://contentsignals.org/)
+# Declaración de preferencias para uso de contenido por parte de IAs
+# ai-train=no   → No se permite usar el contenido para entrenar modelos de IA
+# search=yes    → Sí se permite indexar para búsquedas (Google, Bing, Perplexity)
+# ai-input=yes  → Sí se permite que agentes de IA lean el contenido para responder preguntas
+Content-Signal: ai-train=no, search=yes, ai-input=yes
+
 Sitemap: https://web-sarah.vercel.app/sitemap.xml
 LLMs-txt: https://web-sarah.vercel.app/llms.txt
