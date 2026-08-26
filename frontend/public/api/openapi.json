@@ -1,0 +1,83 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Sarah — Horneado con Amor API",
+    "description": "API oficial para catálogo de repostería, creación de órdenes con entrega en Cochabamba y pagos con QR Simple BNB.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Sarah Bakery",
+      "email": "c3sar64@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://sarah-horneado-con-amor.com/api",
+      "description": "Servidor de Producción"
+    }
+  ],
+  "paths": {
+    "/productos": {
+      "get": {
+        "summary": "Obtener catálogo de productos de repostería",
+        "operationId": "getProductos",
+        "responses": {
+          "200": {
+            "description": "Lista de productos disponibles"
+          }
+        }
+      }
+    },
+    "/ordenes": {
+      "get": {
+        "summary": "Listar órdenes de compra (Admin)",
+        "operationId": "getOrdenes",
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos"
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear nueva orden de pedido en Cochabamba",
+        "operationId": "createOrden",
+        "responses": {
+          "201": {
+            "description": "Orden creada con éxito"
+          }
+        }
+      }
+    },
+    "/ordenes/{id}/confirmar-pago": {
+      "post": {
+        "summary": "Confirmar pago mediante transacción QR BNB",
+        "operationId": "confirmarPago",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pago confirmado y orden en preparación"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Estado de salud del servicio",
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "description": "Servicio operativo"
+          }
+        }
+      }
+    }
+  }
+}

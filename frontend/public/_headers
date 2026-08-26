@@ -2,5 +2,9 @@
   Link: </.well-known/agent.json>; rel="agent", </llms.txt>; rel="describedby", </sitemap.xml>; rel="sitemap", </robots.txt>; rel="robots"
   X-Robots-Tag: index, follow
 
+/.well-known/api-catalog
+  Content-Type: application/linkset+json; charset=utf-8
+
 /api/*
   Link: </.well-known/api-catalog>; rel="api-catalog"
+

@@ -1,31 +1,23 @@
 {
-  "apis": [
+  "linkset": [
     {
-      "title": "Sarah Bakery API",
-      "description": "API para gestión de pedidos, productos y pagos de Sarah — Horneado con Amor",
-      "contact": {
-        "email": "c3sar64@gmail.com"
-      },
-      "endpoints": [
+      "anchor": "https://sarah-horneado-con-amor.com/api/",
+      "service-desc": [
         {
-          "path": "/api/ordenes",
-          "methods": ["GET", "POST"],
-          "description": "Listar y crear órdenes de pedido"
-        },
+          "href": "https://sarah-horneado-con-amor.com/api/openapi.json",
+          "type": "application/vnd.oai.openapi+json"
+        }
+      ],
+      "service-doc": [
         {
-          "path": "/api/ordenes/{id}/confirmar-pago",
-          "methods": ["POST"],
-          "description": "Confirmar pago de una orden"
-        },
+          "href": "https://sarah-horneado-con-amor.com/llms.txt",
+          "type": "text/markdown"
+        }
+      ],
+      "status": [
         {
-          "path": "/api/ordenes/{id}/estado",
-          "methods": ["PUT"],
-          "description": "Actualizar estado de una orden"
-        },
-        {
-          "path": "/api/productos",
-          "methods": ["GET"],
-          "description": "Listar catálogo de productos de repostería"
+          "href": "https://sarah-horneado-con-amor.com/api/health",
+          "type": "application/json"
         }
       ]
     }
