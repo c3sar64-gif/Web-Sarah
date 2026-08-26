@@ -1,0 +1,33 @@
+{
+  "issuer": "https://sarah-horneado-con-amor.com",
+  "authorization_endpoint": "https://sarah-horneado-con-amor.com/admin/login",
+  "token_endpoint": "https://sarah-horneado-con-amor.com/api/auth/token",
+  "jwks_uri": "https://sarah-horneado-con-amor.com/.well-known/jwks.json",
+  "response_types_supported": [
+    "code",
+    "token"
+  ],
+  "grant_types_supported": [
+    "authorization_code",
+    "client_credentials",
+    "password"
+  ],
+  "subject_types_supported": [
+    "public"
+  ],
+  "id_token_signing_alg_values_supported": [
+    "RS256",
+    "HS256"
+  ],
+  "scopes_supported": [
+    "openid",
+    "profile",
+    "email",
+    "orders:read",
+    "orders:write"
+  ],
+  "token_endpoint_auth_methods_supported": [
+    "client_secret_post",
+    "client_secret_basic"
+  ]
+}
