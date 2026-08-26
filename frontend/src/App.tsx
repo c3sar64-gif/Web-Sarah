@@ -3,6 +3,7 @@ import AppRoutes from './routes'
 import { CartProvider } from './context/CartContext'
 import { AuthProvider } from './context/AuthContext'
 import CartDrawer from './components/CartDrawer'
+import WhatsAppFloatingButton from './components/WhatsAppFloatingButton'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <CartProvider>
           <AppRoutes />
           <CartDrawer />
+          <WhatsAppFloatingButton />
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

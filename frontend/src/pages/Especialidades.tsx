@@ -2,8 +2,11 @@ import { useMemo, useState } from 'react'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import ProductCard from '../components/ProductCard'
+import ProductCardSkeleton from '../components/ProductCardSkeleton'
+import TrustBadges from '../components/TrustBadges'
 import { useProducts } from '../hooks/useProducts'
 import { useCategorias } from '../hooks/useCategorias'
+import { Sparkles } from 'lucide-react'
 
 const TODAS = 'todas'
 
@@ -24,40 +27,42 @@ export default function Especialidades() {
     <div className="font-body bg-cream text-[#3D2C33] min-h-screen overflow-x-hidden">
       <Navbar />
 
-      <main className="max-w-6xl mx-auto px-8 md:px-14 pt-40 md:pt-48 pb-24">
+      <main className="max-w-6xl mx-auto px-6 md:px-12 pt-36 md:pt-44 pb-20">
         <div className="text-center max-w-xl mx-auto mb-10">
-          <span className="text-sm tracking-widest uppercase text-sage-dark font-semibold">
-            Nuestro menú
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase bg-rose-100/80 text-rose-800 border border-rose-200">
+            <Sparkles className="w-3.5 h-3.5 text-rose-600" />
+            Catálogo Artesanal
           </span>
-          <h1 className="font-display text-3xl md:text-4xl text-[#3D2C33] mt-3">
+          <h1 className="font-display text-3xl md:text-5xl text-[#3D2C33] mt-3">
             Nuestras Especialidades
           </h1>
-          <p className="text-[#6B5560] mt-3">
-            Cuatro maneras de endulzar tu mesa, todas horneadas frescas cada día.
+          <p className="text-sm md:text-base text-[#6B5560] mt-3">
+            Pies, tortas, queques y galletas elaborados artesanalmente bajo pedido en Cochabamba.
           </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        {/* Filtros de Categorías */}
+        <div className="flex flex-wrap justify-center gap-2.5 mb-12">
           <button
             type="button"
             onClick={() => setActiveTab(TODAS)}
-            className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+            className={`rounded-full px-5 py-2.5 text-xs md:text-sm font-semibold transition-all shadow-2xs ${
               activeTab === TODAS
-                ? 'bg-rose-metallic text-white'
-                : 'bg-white text-[#3D2C33] border border-taupe hover:bg-[#F1EBE0]'
+                ? 'bg-rose-metallic text-white shadow-xs'
+                : 'bg-white text-[#3D2C33] border border-taupe/40 hover:bg-rose-50/50'
             }`}
           >
-            Todas
+            Todas las Especialidades
           </button>
           {categorias.map((cat) => (
             <button
               key={cat.id}
               type="button"
               onClick={() => setActiveTab(String(cat.id))}
-              className={`rounded-full px-5 py-2 text-sm font-medium transition-colors ${
+              className={`rounded-full px-5 py-2.5 text-xs md:text-sm font-semibold transition-all shadow-2xs ${
                 activeTab === String(cat.id)
-                  ? 'bg-rose-metallic text-white'
-                  : 'bg-white text-[#3D2C33] border border-taupe hover:bg-[#F1EBE0]'
+                  ? 'bg-rose-metallic text-white shadow-xs'
+                  : 'bg-white text-[#3D2C33] border border-taupe/40 hover:bg-rose-50/50'
               }`}
             >
               {cat.nombre}
@@ -65,25 +70,40 @@ export default function Especialidades() {
           ))}
         </div>
 
-        {loading && <p className="text-center text-[#6B5560]">Cargando productos…</p>}
+        {/* Loading con Skeletons */}
+        {loading && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(8)].map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        )}
 
         {errorProducts && (
-          <p className="text-center text-sm text-[#6B5560]">
-            No se pudo conectar al backend todavía ({errorProducts}). Los productos aparecerán
-            aquí una vez que la API esté corriendo.
-          </p>
+          <div className="text-center p-8 rounded-2xl bg-rose-50 border border-rose-100 max-w-lg mx-auto mb-8">
+            <p className="text-xs text-rose-800">
+              Conectando con el catálogo ({errorProducts}). Los productos se sincronizarán en vivo.
+            </p>
+          </div>
         )}
 
         {!loading && !errorProducts && filtered.length === 0 && (
-          <p className="text-center text-[#6B5560]">
-            No hay productos en esta categoría todavía.
-          </p>
+          <div className="text-center p-12 rounded-3xl bg-white border border-gray-100 max-w-lg mx-auto shadow-sm">
+            <p className="text-sm text-gray-600">
+              No hay productos disponibles en esta categoría por el momento.
+            </p>
+          </div>
         )}
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filtered.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
+        </div>
+
+        {/* Insignias de Confianza en el Catálogo */}
+        <div className="mt-16 pt-10 border-t border-rose-100">
+          <TrustBadges />
         </div>
       </main>
 

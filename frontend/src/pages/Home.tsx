@@ -3,7 +3,11 @@ import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import Hero from '../components/Hero'
 import ProductCard from '../components/ProductCard'
+import ProductCardSkeleton from '../components/ProductCardSkeleton'
+import TrustBadges from '../components/TrustBadges'
+import BentoHome from '../components/BentoHome'
 import { useProducts } from '../hooks/useProducts'
+import { Sparkles, ArrowRight } from 'lucide-react'
 
 export default function Home() {
   const { products, loading, error } = useProducts()
@@ -14,32 +18,50 @@ export default function Home() {
       <Navbar />
 
       <main>
+        {/* Hero Section */}
         <Hero />
 
-        <section className="max-w-6xl mx-auto px-8 md:px-14 py-24">
-          <div className="text-center max-w-xl mx-auto mb-14">
-            <span className="text-sm tracking-widest uppercase text-sage-dark font-semibold">
-              Lo más pedido
+        {/* Insignias de Confianza y Seguridad */}
+        <TrustBadges />
+
+        {/* Productos Destacados */}
+        <section className="max-w-6xl mx-auto px-6 md:px-12 py-16">
+          <div className="text-center max-w-xl mx-auto mb-12">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase bg-rose-100/70 text-rose-800 border border-rose-200/60">
+              <Sparkles className="w-3.5 h-3.5 text-rose-600" />
+              Lo más pedido en Cochabamba
             </span>
             <h2 className="font-display text-3xl md:text-4xl text-[#3D2C33] mt-3">
-              Un vistazo a nuestras especialidades
+              Nuestras Especialidades
             </h2>
+            <p className="text-sm text-[#6B5560] mt-2">
+              Elaboradas artesanalmente con ingredientes seleccionados de primera calidad.
+            </p>
           </div>
 
-          {loading && <p className="text-center text-[#6B5560]">Cargando productos…</p>}
+          {/* Estado de carga elegante con Skeletons */}
+          {loading && (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <ProductCardSkeleton key={i} />
+              ))}
+            </div>
+          )}
 
           {error && (
-            <p className="text-center text-sm text-[#6B5560]">
-              No se pudo conectar al backend todavía ({error}). Los productos aparecerán aquí una
-              vez que la API esté corriendo.
-            </p>
+            <div className="text-center p-8 rounded-2xl bg-rose-50 border border-rose-100 max-w-lg mx-auto">
+              <p className="text-xs text-rose-800">
+                Conectando con el catálogo en vivo ({error}). Los productos se sincronizan automáticamente con la API.
+              </p>
+            </div>
           )}
 
           {!loading && !error && destacados.length === 0 && (
-            <p className="text-center text-[#6B5560]">
-              Todavía no hay productos cargados. Agrégalos desde la API o directo en la base de
-              Supabase.
-            </p>
+            <div className="text-center p-8 rounded-2xl bg-white border border-gray-100 max-w-lg mx-auto shadow-sm">
+              <p className="text-xs text-gray-600">
+                Estamos horneando novedades. Visita nuestro menú completo para descubrir todas las delicias disponibles.
+              </p>
+            </div>
           )}
 
           {destacados.length > 0 && (
@@ -53,12 +75,16 @@ export default function Home() {
           <div className="text-center mt-12">
             <Link
               to="/especialidades"
-              className="inline-block rounded-full bg-rose-metallic hover:bg-rose-metallic-dark text-white font-medium px-7 py-3.5 transition-all hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 rounded-full bg-rose-metallic hover:bg-rose-metallic-dark text-white font-semibold text-sm px-8 py-4 transition-all hover:-translate-y-0.5 shadow-md hover:shadow-lg"
             >
               Ver todo el menú
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </section>
+
+        {/* Bento Grid con Pasos, Cobertura y Testimonios */}
+        <BentoHome />
       </main>
 
       <Footer />
