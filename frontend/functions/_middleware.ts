@@ -16,7 +16,7 @@ export async function onRequest(context: {
   // 1. Manejo garantizado de endpoints .well-known con Content-Type y CORS correctos
   if (url.pathname === '/.well-known/oauth-protected-resource' || url.pathname === '/.well-known/oauth-protected-resource.json' || url.pathname.startsWith('/.well-known/oauth-protected-resource/')) {
     const data = {
-      resource: 'https://sarah-horneado-con-amor.com/api/',
+      resource: 'https://sarah-horneado-con-amor.com',
       authorization_servers: ['https://sarah-horneado-con-amor.com'],
       scopes_supported: ['orders:read', 'orders:write', 'products:read'],
       bearer_methods_supported: ['header'],
@@ -47,6 +47,7 @@ export async function onRequest(context: {
       id_token_signing_alg_values_supported: ['RS256', 'HS256'],
       scopes_supported: ['openid', 'profile', 'email', 'orders:read', 'orders:write'],
       agent_auth: {
+        skill: 'https://sarah-horneado-con-amor.com/.well-known/agent-skills/ordering/SKILL.md',
         register_uri: 'https://sarah-horneado-con-amor.com/api/auth/register',
         register_url: 'https://sarah-horneado-con-amor.com/api/auth/register',
         supported_identity_types: ['agent', 'user'],

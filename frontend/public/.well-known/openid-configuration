@@ -31,6 +31,7 @@
     "orders:write"
   ],
   "agent_auth": {
+    "skill": "https://sarah-horneado-con-amor.com/.well-known/agent-skills/ordering/SKILL.md",
     "register_uri": "https://sarah-horneado-con-amor.com/api/auth/register",
     "register_url": "https://sarah-horneado-con-amor.com/api/auth/register",
     "supported_identity_types": [

@@ -1,5 +1,5 @@
 {
-  "resource": "https://sarah-horneado-con-amor.com/api/",
+  "resource": "https://sarah-horneado-con-amor.com",
   "authorization_servers": [
     "https://sarah-horneado-con-amor.com"
   ],
