@@ -79,24 +79,14 @@ export default function AdminRecetaForm() {
       topRef.current?.scrollIntoView({ behavior: 'smooth' })
       return
     }
-    if (!formData.ingredientes.trim()) {
-      setError('Debes incluir la lista de ingredientes.')
-      topRef.current?.scrollIntoView({ behavior: 'smooth' })
-      return
-    }
-    if (!formData.instrucciones.trim()) {
-      setError('Debes incluir las instrucciones de preparación.')
-      topRef.current?.scrollIntoView({ behavior: 'smooth' })
-      return
-    }
 
     setLoading(true)
 
     const payload: RecetaInput = {
       titulo: formData.titulo.trim(),
       descripcion: formData.descripcion?.trim() || null,
-      ingredientes: formData.ingredientes.trim(),
-      instrucciones: formData.instrucciones.trim(),
+      ingredientes: formData.ingredientes?.trim() || '',
+      instrucciones: formData.instrucciones?.trim() || '',
       tiempoPreparacionMinutos: formData.tiempoPreparacionMinutos ? Number(formData.tiempoPreparacionMinutos) : null,
       porciones: formData.porciones ? Number(formData.porciones) : null,
       dificultad: formData.dificultad || 'Fácil',
@@ -370,8 +360,8 @@ export default function AdminRecetaForm() {
         {/* Ingredientes */}
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1 flex items-center justify-between">
-            <span>Ingredientes * (Un ingrediente por línea)</span>
-            <span className="text-[11px] font-normal text-gray-400">Presiona Enter para nuevo ingrediente</span>
+            <span>Ingredientes (Opcional si usas video de YouTube)</span>
+            <span className="text-[11px] font-normal text-gray-400">Un ingrediente por línea</span>
           </label>
           <textarea
             rows={5}
@@ -385,8 +375,8 @@ export default function AdminRecetaForm() {
         {/* Instrucciones */}
         <div>
           <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1 flex items-center justify-between">
-            <span>Instrucciones de Preparación * (Un paso por línea)</span>
-            <span className="text-[11px] font-normal text-gray-400">Presiona Enter para nuevo paso</span>
+            <span>Instrucciones de Preparación (Opcional)</span>
+            <span className="text-[11px] font-normal text-gray-400">Un paso por línea</span>
           </label>
           <textarea
             rows={6}

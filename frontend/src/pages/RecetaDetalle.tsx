@@ -247,33 +247,40 @@ export default function RecetaDetalle() {
                 <ChefHat className="w-5 h-5 text-rose-500" />
                 <h2 className="font-display font-bold text-lg text-gray-900">Ingredientes</h2>
               </div>
-              <p className="text-[11px] text-gray-500 mb-4">
-                Marca los ingredientes a medida que los tengas listos:
-              </p>
-
-              <ul className="space-y-2.5">
-                {ingredientesList.map((ing, idx) => {
-                  const marcado = !!ingredientesMarcados[idx]
-                  return (
-                    <li
-                      key={idx}
-                      onClick={() => toggleIngrediente(idx)}
-                      className={`flex items-start gap-2.5 p-2 rounded-xl cursor-pointer text-xs transition-all ${
-                        marcado
-                          ? 'bg-emerald-50/60 text-gray-400 line-through'
-                          : 'hover:bg-rose-50/50 text-gray-800'
-                      }`}
-                    >
-                      <CheckCircle2
-                        className={`w-4 h-4 mt-0.5 shrink-0 transition-colors ${
-                          marcado ? 'text-emerald-500' : 'text-gray-300'
-                        }`}
-                      />
-                      <span className="leading-snug">{ing}</span>
-                    </li>
-                  )
-                })}
-              </ul>
+              {ingredientesList.length > 0 ? (
+                <>
+                  <p className="text-[11px] text-gray-500 mb-4">
+                    Marca los ingredientes a medida que los tengas listos:
+                  </p>
+                  <ul className="space-y-2.5">
+                    {ingredientesList.map((ing, idx) => {
+                      const marcado = !!ingredientesMarcados[idx]
+                      return (
+                        <li
+                          key={idx}
+                          onClick={() => toggleIngrediente(idx)}
+                          className={`flex items-start gap-2.5 p-2 rounded-xl cursor-pointer text-xs transition-all ${
+                            marcado
+                              ? 'bg-emerald-50/60 text-gray-400 line-through'
+                              : 'hover:bg-rose-50/50 text-gray-800'
+                          }`}
+                        >
+                          <CheckCircle2
+                            className={`w-4 h-4 mt-0.5 shrink-0 transition-colors ${
+                              marcado ? 'text-emerald-500' : 'text-gray-300'
+                            }`}
+                          />
+                          <span className="leading-snug">{ing}</span>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </>
+              ) : (
+                <p className="text-xs text-gray-500 italic">
+                  Ingredientes y cantidades detallados en el video tutorial de YouTube.
+                </p>
+              )}
             </div>
           </div>
 
@@ -285,20 +292,26 @@ export default function RecetaDetalle() {
                 <h2 className="font-display font-bold text-xl text-gray-900">Preparación Paso a Paso</h2>
               </div>
 
-              <div className="space-y-6">
-                {instruccionesList.map((paso, idx) => (
-                  <div key={idx} className="flex items-start gap-4">
-                    <div className="w-8 h-8 rounded-full bg-rose-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
-                      {idx + 1}
+              {instruccionesList.length > 0 ? (
+                <div className="space-y-6">
+                  {instruccionesList.map((paso, idx) => (
+                    <div key={idx} className="flex items-start gap-4">
+                      <div className="w-8 h-8 rounded-full bg-rose-500 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-xs">
+                        {idx + 1}
+                      </div>
+                      <div className="flex-1 pt-1">
+                        <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
+                          {paso}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-1 pt-1">
-                      <p className="text-xs sm:text-sm text-gray-700 leading-relaxed font-normal">
-                        {paso}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                  Mira el video superior para ver el paso a paso detallado de la preparación de este postre.
+                </p>
+              )}
             </div>
 
             {/* CTA para pedir el producto horneado */}

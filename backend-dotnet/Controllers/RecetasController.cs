@@ -100,8 +100,8 @@ namespace Backend.Controllers
                 {
                     Titulo = dto.Titulo.Trim(),
                     Descripcion = string.IsNullOrWhiteSpace(dto.Descripcion) ? null : dto.Descripcion.Trim(),
-                    Ingredientes = dto.Ingredientes.Trim(),
-                    Instrucciones = dto.Instrucciones.Trim(),
+                    Ingredientes = dto.Ingredientes?.Trim() ?? string.Empty,
+                    Instrucciones = dto.Instrucciones?.Trim() ?? string.Empty,
                     TiempoPreparacionMinutos = dto.TiempoPreparacionMinutos,
                     Porciones = dto.Porciones,
                     Dificultad = string.IsNullOrWhiteSpace(dto.Dificultad) ? "Fácil" : dto.Dificultad.Trim(),
@@ -140,8 +140,8 @@ namespace Backend.Controllers
 
                 receta.Titulo = dto.Titulo.Trim();
                 receta.Descripcion = string.IsNullOrWhiteSpace(dto.Descripcion) ? null : dto.Descripcion.Trim();
-                receta.Ingredientes = dto.Ingredientes.Trim();
-                receta.Instrucciones = dto.Instrucciones.Trim();
+                receta.Ingredientes = dto.Ingredientes?.Trim() ?? string.Empty;
+                receta.Instrucciones = dto.Instrucciones?.Trim() ?? string.Empty;
                 receta.TiempoPreparacionMinutos = dto.TiempoPreparacionMinutos;
                 receta.Porciones = dto.Porciones;
                 receta.Dificultad = string.IsNullOrWhiteSpace(dto.Dificultad) ? "Fácil" : dto.Dificultad.Trim();

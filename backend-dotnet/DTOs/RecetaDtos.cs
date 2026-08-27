@@ -30,11 +30,9 @@ namespace Backend.DTOs
         [MaxLength(4000)]
         public string? Descripcion { get; set; }
 
-        [Required(ErrorMessage = "Los ingredientes son obligatorios.")]
-        public string Ingredientes { get; set; } = string.Empty;
+        public string? Ingredientes { get; set; }
 
-        [Required(ErrorMessage = "Las instrucciones de preparación son obligatorias.")]
-        public string Instrucciones { get; set; } = string.Empty;
+        public string? Instrucciones { get; set; }
 
         public int? TiempoPreparacionMinutos { get; set; }
 
@@ -59,5 +57,6 @@ namespace Backend.DTOs
 
     public class RecetaUpdateDto : RecetaCreateDto
     {
+        public int? Id { get; set; }
     }
 }

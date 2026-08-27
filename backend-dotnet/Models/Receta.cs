@@ -13,10 +13,8 @@ namespace Backend.Models
         [MaxLength(4000)]
         public string? Descripcion { get; set; }
 
-        [Required]
         public string Ingredientes { get; set; } = string.Empty;
 
-        [Required]
         public string Instrucciones { get; set; } = string.Empty;
 
         public int? TiempoPreparacionMinutos { get; set; }
