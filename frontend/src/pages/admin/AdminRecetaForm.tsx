@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
+import axios from 'axios'
 import { getReceta, createReceta, updateReceta } from '../../api/recetas'
 import type { RecetaInput } from '../../types/receta'
 import { getYouTubeEmbedUrl } from '../../utils/youtube'
@@ -83,18 +84,46 @@ export default function AdminRecetaForm() {
     setLoading(true)
     setError(null)
 
+    const payload: RecetaInput = {
+      titulo: formData.titulo.trim(),
+      descripcion: formData.descripcion?.trim() || null,
+      ingredientes: formData.ingredientes.trim(),
+      instrucciones: formData.instrucciones.trim(),
+      tiempoPreparacionMinutos: formData.tiempoPreparacionMinutos ? Number(formData.tiempoPreparacionMinutos) : null,
+      porciones: formData.porciones ? Number(formData.porciones) : null,
+      dificultad: formData.dificultad || 'Fácil',
+      imagenUrl: formData.imagenUrl?.trim() || null,
+      videoUrl: formData.videoUrl?.trim() || null,
+      youtubeUrl: formData.youtubeUrl?.trim() || null,
+      publicada: formData.publicada,
+      destacada: formData.destacada,
+    }
+
     try {
       if (isEditing && id) {
-        await updateReceta(Number(id), formData)
+        await updateReceta(Number(id), payload)
       } else {
-        await createReceta(formData)
+        await createReceta(payload)
       }
       setSuccess(true)
       setTimeout(() => {
         navigate('/admin/recetas')
       }, 1200)
-    } catch (err) {
-      setError('Ocurrió un error al guardar la receta. Revisa los datos ingresados.')
+    } catch (err: unknown) {
+      let msg = 'Ocurrió un error al guardar la receta. Revisa los datos ingresados.'
+      if (axios.isAxiosError(err) && err.response) {
+        if (err.response.data?.message) {
+          msg = err.response.data.message
+        } else if (err.response.data?.errors) {
+          const errorsObj = err.response.data.errors as Record<string, string[]>
+          msg = Object.values(errorsObj).flat().join(' • ')
+        } else if (typeof err.response.data === 'string') {
+          msg = err.response.data
+        } else if (err.response.status === 401) {
+          msg = 'Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.'
+        }
+      }
+      setError(msg)
     } finally {
       setLoading(false)
     }

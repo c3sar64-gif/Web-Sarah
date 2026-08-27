@@ -24,10 +24,10 @@ namespace Backend.DTOs
     public class RecetaCreateDto
     {
         [Required(ErrorMessage = "El título de la receta es obligatorio.")]
-        [MaxLength(200)]
+        [MaxLength(300)]
         public string Titulo { get; set; } = string.Empty;
 
-        [MaxLength(1000)]
+        [MaxLength(4000)]
         public string? Descripcion { get; set; }
 
         [Required(ErrorMessage = "Los ingredientes son obligatorios.")]
@@ -43,13 +43,13 @@ namespace Backend.DTOs
         [MaxLength(50)]
         public string Dificultad { get; set; } = "Fácil";
 
-        [MaxLength(500)]
+        [MaxLength(2000)]
         public string? ImagenUrl { get; set; }
 
-        [MaxLength(500)]
+        [MaxLength(2000)]
         public string? VideoUrl { get; set; }
 
-        [MaxLength(500)]
+        [MaxLength(2000)]
         public string? YoutubeUrl { get; set; }
 
         public bool Publicada { get; set; } = true;

@@ -45,7 +45,6 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RecetaDto>>> GetRecetas([FromQuery] bool? todas = false)
         {
-            // Si no se piden todas (modo público), usamos caché
             if (todas != true && _cache.TryGetValue(RecetasPublicCacheKey, out List<RecetaDto>? cached) && cached != null)
             {
                 return cached;
@@ -95,30 +94,37 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<RecetaDto>> PostReceta(RecetaCreateDto dto)
         {
-            var receta = new Receta
+            try
             {
-                Titulo = dto.Titulo.Trim(),
-                Descripcion = dto.Descripcion?.Trim(),
-                Ingredientes = dto.Ingredientes.Trim(),
-                Instrucciones = dto.Instrucciones.Trim(),
-                TiempoPreparacionMinutos = dto.TiempoPreparacionMinutos,
-                Porciones = dto.Porciones,
-                Dificultad = string.IsNullOrWhiteSpace(dto.Dificultad) ? "Fácil" : dto.Dificultad.Trim(),
-                ImagenUrl = dto.ImagenUrl?.Trim(),
-                VideoUrl = dto.VideoUrl?.Trim(),
-                YoutubeUrl = dto.YoutubeUrl?.Trim(),
-                Publicada = dto.Publicada,
-                Destacada = dto.Destacada,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
+                var receta = new Receta
+                {
+                    Titulo = dto.Titulo.Trim(),
+                    Descripcion = string.IsNullOrWhiteSpace(dto.Descripcion) ? null : dto.Descripcion.Trim(),
+                    Ingredientes = dto.Ingredientes.Trim(),
+                    Instrucciones = dto.Instrucciones.Trim(),
+                    TiempoPreparacionMinutos = dto.TiempoPreparacionMinutos,
+                    Porciones = dto.Porciones,
+                    Dificultad = string.IsNullOrWhiteSpace(dto.Dificultad) ? "Fácil" : dto.Dificultad.Trim(),
+                    ImagenUrl = string.IsNullOrWhiteSpace(dto.ImagenUrl) ? null : dto.ImagenUrl.Trim(),
+                    VideoUrl = string.IsNullOrWhiteSpace(dto.VideoUrl) ? null : dto.VideoUrl.Trim(),
+                    YoutubeUrl = string.IsNullOrWhiteSpace(dto.YoutubeUrl) ? null : dto.YoutubeUrl.Trim(),
+                    Publicada = dto.Publicada,
+                    Destacada = dto.Destacada,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
 
-            _context.Recetas.Add(receta);
-            await _context.SaveChangesAsync();
+                _context.Recetas.Add(receta);
+                await _context.SaveChangesAsync();
 
-            _cache.Remove(RecetasPublicCacheKey);
+                _cache.Remove(RecetasPublicCacheKey);
 
-            return CreatedAtAction(nameof(GetReceta), new { id = receta.Id }, MapToDto(receta));
+                return CreatedAtAction(nameof(GetReceta), new { id = receta.Id }, MapToDto(receta));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error al crear la receta: " + ex.Message });
+            }
         }
 
         // PUT: api/recetas/5
@@ -126,28 +132,35 @@ namespace Backend.Controllers
         [HttpPut("{id:int}")]
         public async Task<IActionResult> PutReceta(int id, RecetaUpdateDto dto)
         {
-            var receta = await _context.Recetas.FindAsync(id);
-            if (receta == null)
-                return NotFound(new { message = "La receta no existe." });
+            try
+            {
+                var receta = await _context.Recetas.FindAsync(id);
+                if (receta == null)
+                    return NotFound(new { message = "La receta no existe." });
 
-            receta.Titulo = dto.Titulo.Trim();
-            receta.Descripcion = dto.Descripcion?.Trim();
-            receta.Ingredientes = dto.Ingredientes.Trim();
-            receta.Instrucciones = dto.Instrucciones.Trim();
-            receta.TiempoPreparacionMinutos = dto.TiempoPreparacionMinutos;
-            receta.Porciones = dto.Porciones;
-            receta.Dificultad = string.IsNullOrWhiteSpace(dto.Dificultad) ? "Fácil" : dto.Dificultad.Trim();
-            receta.ImagenUrl = dto.ImagenUrl?.Trim();
-            receta.VideoUrl = dto.VideoUrl?.Trim();
-            receta.YoutubeUrl = dto.YoutubeUrl?.Trim();
-            receta.Publicada = dto.Publicada;
-            receta.Destacada = dto.Destacada;
-            receta.UpdatedAt = DateTime.UtcNow;
+                receta.Titulo = dto.Titulo.Trim();
+                receta.Descripcion = string.IsNullOrWhiteSpace(dto.Descripcion) ? null : dto.Descripcion.Trim();
+                receta.Ingredientes = dto.Ingredientes.Trim();
+                receta.Instrucciones = dto.Instrucciones.Trim();
+                receta.TiempoPreparacionMinutos = dto.TiempoPreparacionMinutos;
+                receta.Porciones = dto.Porciones;
+                receta.Dificultad = string.IsNullOrWhiteSpace(dto.Dificultad) ? "Fácil" : dto.Dificultad.Trim();
+                receta.ImagenUrl = string.IsNullOrWhiteSpace(dto.ImagenUrl) ? null : dto.ImagenUrl.Trim();
+                receta.VideoUrl = string.IsNullOrWhiteSpace(dto.VideoUrl) ? null : dto.VideoUrl.Trim();
+                receta.YoutubeUrl = string.IsNullOrWhiteSpace(dto.YoutubeUrl) ? null : dto.YoutubeUrl.Trim();
+                receta.Publicada = dto.Publicada;
+                receta.Destacada = dto.Destacada;
+                receta.UpdatedAt = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
-            _cache.Remove(RecetasPublicCacheKey);
+                await _context.SaveChangesAsync();
+                _cache.Remove(RecetasPublicCacheKey);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error al actualizar la receta: " + ex.Message });
+            }
         }
 
         // DELETE: api/recetas/5
@@ -155,16 +168,23 @@ namespace Backend.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteReceta(int id)
         {
-            var receta = await _context.Recetas.FindAsync(id);
-            if (receta == null)
-                return NotFound(new { message = "La receta no existe." });
+            try
+            {
+                var receta = await _context.Recetas.FindAsync(id);
+                if (receta == null)
+                    return NotFound(new { message = "La receta no existe." });
 
-            _context.Recetas.Remove(receta);
-            await _context.SaveChangesAsync();
+                _context.Recetas.Remove(receta);
+                await _context.SaveChangesAsync();
 
-            _cache.Remove(RecetasPublicCacheKey);
+                _cache.Remove(RecetasPublicCacheKey);
 
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error al eliminar la receta: " + ex.Message });
+            }
         }
     }
 }

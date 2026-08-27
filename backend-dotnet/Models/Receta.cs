@@ -7,33 +7,33 @@ namespace Backend.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(200)]
+        [MaxLength(300)]
         public string Titulo { get; set; } = string.Empty;
 
-        [MaxLength(1000)]
+        [MaxLength(4000)]
         public string? Descripcion { get; set; }
 
         [Required]
-        public string Ingredientes { get; set; } = string.Empty; // Texto o lista separada por saltos de línea / JSON
+        public string Ingredientes { get; set; } = string.Empty;
 
         [Required]
-        public string Instrucciones { get; set; } = string.Empty; // Pasos de preparación
+        public string Instrucciones { get; set; } = string.Empty;
 
         public int? TiempoPreparacionMinutos { get; set; }
 
         public int? Porciones { get; set; }
 
         [MaxLength(50)]
-        public string Dificultad { get; set; } = "Fácil"; // Fácil, Intermedio, Avanzado
+        public string Dificultad { get; set; } = "Fácil";
 
-        [MaxLength(500)]
+        [MaxLength(2000)]
         public string? ImagenUrl { get; set; }
 
-        [MaxLength(500)]
-        public string? VideoUrl { get; set; } // Archivo de video directo / MP4
+        [MaxLength(2000)]
+        public string? VideoUrl { get; set; }
 
-        [MaxLength(500)]
-        public string? YoutubeUrl { get; set; } // Enlace de YouTube
+        [MaxLength(2000)]
+        public string? YoutubeUrl { get; set; }
 
         public bool Publicada { get; set; } = true;
 
