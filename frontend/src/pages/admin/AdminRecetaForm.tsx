@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom'
 import axios from 'axios'
 import { getReceta, createReceta, updateReceta } from '../../api/recetas'
 import type { RecetaInput } from '../../types/receta'
-import { getYouTubeEmbedUrl } from '../../utils/youtube'
+import { getYouTubeEmbedUrl, getYouTubeThumbnailUrl } from '../../utils/youtube'
 import {
   ArrowLeft,
   Image,
@@ -14,6 +14,7 @@ import {
   CheckCircle,
   AlertCircle,
   Loader2,
+  Trash2,
 } from 'lucide-react'
 import YouTubeIcon from '../../components/YouTubeIcon'
 
@@ -115,7 +116,7 @@ export default function AdminRecetaForm() {
         setSuccess('¡Receta creada con éxito!')
       }
 
-      // Redirigir tras breve confirmación visual
+      // Redirigir al listado con mensaje de confirmación
       setTimeout(() => {
         navigate('/admin/recetas', {
           state: {
@@ -147,10 +148,11 @@ export default function AdminRecetaForm() {
   }
 
   const ytEmbed = getYouTubeEmbedUrl(formData.youtubeUrl)
+  const ytThumb = getYouTubeThumbnailUrl(formData.youtubeUrl)
 
   if (fetching) {
     return (
-      <div className="text-center py-20 bg-white rounded-3xl border border-taupe/20 max-w-xl mx-auto my-10">
+      <div className="text-center py-20 bg-white rounded-3xl border border-taupe/20 max-w-xl mx-auto my-10 shadow-sm">
         <Loader2 className="w-10 h-10 text-mauve animate-spin mx-auto mb-3" />
         <p className="text-sm font-medium text-gray-700">Cargando datos de la receta…</p>
       </div>
@@ -186,12 +188,12 @@ export default function AdminRecetaForm() {
       {success && (
         <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-800 flex items-center gap-2.5 shadow-xs animate-fadeIn">
           <CheckCircle className="w-5 h-5 shrink-0 text-emerald-600" />
-          <span className="font-bold">{success} Redirigiendo…</span>
+          <span className="font-bold">{success} Redirigiendo al panel…</span>
         </div>
       )}
 
       {/* Formulario */}
-      <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-8 rounded-3xl border border-taupe/30 shadow-xs space-y-6">
+      <form onSubmit={handleSubmit} noValidate className="bg-white p-6 sm:p-8 rounded-3xl border border-taupe/30 shadow-xs space-y-6">
         
         {/* Título */}
         <div>
@@ -200,7 +202,6 @@ export default function AdminRecetaForm() {
           </label>
           <input
             type="text"
-            required
             value={formData.titulo}
             onChange={(e) => setFormData({ ...formData, titulo: e.target.value })}
             placeholder="Ej. Pie de Limón Artesanal"
@@ -291,7 +292,7 @@ export default function AdminRecetaForm() {
             className="w-full px-4 py-2.5 rounded-xl border border-red-200 text-xs sm:text-sm text-gray-900 bg-white focus:outline-none focus:border-red-500 shadow-2xs"
           />
           <p className="text-[11px] text-gray-600 leading-relaxed">
-            Puedes pegar cualquier enlace de YouTube o YouTube Short. Se incrustará con reproductor de video de alta definición.
+            Puedes pegar cualquier enlace de YouTube o YouTube Short. Se reproducirá directamente en la página del cliente.
           </p>
 
           {/* Preview en vivo de YouTube */}
@@ -309,21 +310,41 @@ export default function AdminRecetaForm() {
 
         {/* Imagen de Portada y Video Directo */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5 flex items-center gap-1">
-              <Image className="w-3.5 h-3.5 text-mauve" /> URL de Imagen de Portada
-            </label>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 flex items-center gap-1">
+                <Image className="w-3.5 h-3.5 text-mauve" /> URL de Imagen de Portada
+              </label>
+              {formData.imagenUrl && (
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, imagenUrl: '' })}
+                  className="text-[11px] text-red-600 hover:underline flex items-center gap-1"
+                >
+                  <Trash2 className="w-3 h-3" /> Usar miniatura de YouTube
+                </button>
+              )}
+            </div>
             <input
               type="text"
               value={formData.imagenUrl ?? ''}
               onChange={(e) => setFormData({ ...formData, imagenUrl: e.target.value })}
-              placeholder="https://.../foto-torta.jpg"
+              placeholder={ytThumb ? 'Opcional (si se deja vacío se usará la de YouTube)' : 'https://.../foto-torta.jpg'}
               className="w-full px-3 py-2 rounded-xl border border-taupe/40 text-xs sm:text-sm text-gray-900 focus:outline-none focus:border-mauve"
             />
+            {formData.imagenUrl ? (
+              <p className="text-[10px] text-gray-500">
+                Mostrando imagen personalizada. Puedes borrarla si quieres usar la miniatura de YouTube.
+              </p>
+            ) : ytThumb ? (
+              <p className="text-[10px] text-emerald-600 font-medium">
+                ✓ Se usará automáticamente la miniatura del video de YouTube.
+              </p>
+            ) : null}
           </div>
 
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5 flex items-center gap-1">
+          <div className="space-y-2">
+            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 flex items-center gap-1">
               <Video className="w-3.5 h-3.5 text-mauve" /> Video Directo (Opcional MP4)
             </label>
             <input
@@ -344,7 +365,6 @@ export default function AdminRecetaForm() {
           </label>
           <textarea
             rows={5}
-            required
             value={formData.ingredientes}
             onChange={(e) => setFormData({ ...formData, ingredientes: e.target.value })}
             placeholder={"200g de harina 000\n100g de mantequilla fría\n1 lata de leche condensada\n4 limones sutil (jugo y ralladura)\n3 claras de huevo\n150g de azúcar"}
@@ -360,7 +380,6 @@ export default function AdminRecetaForm() {
           </label>
           <textarea
             rows={6}
-            required
             value={formData.instrucciones}
             onChange={(e) => setFormData({ ...formData, instrucciones: e.target.value })}
             placeholder={"Mezclar la harina con la mantequilla en cubos hasta obtener un arenado fino.\nForrar el molde de tarta y hornear a 180°C durante 15 minutos hasta dorar.\nBatir la leche condensada con el jugo de limón hasta espesar y volcar sobre la masa.\nPreparar un merengue suizo a baño maría y decorar con manga.\nDorar el merengue con soplete o gratinador del horno."}
@@ -395,15 +414,15 @@ export default function AdminRecetaForm() {
         {(error || success) && (
           <div className="pt-2">
             {error && (
-              <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 flex items-center gap-2">
+              <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs sm:text-sm text-red-700 flex items-center gap-2 font-medium">
                 <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
                 <span>{error}</span>
               </div>
             )}
             {success && (
-              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2">
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-800 flex items-center gap-2 font-bold animate-fadeIn">
                 <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span className="font-bold">{success}</span>
+                <span>{success} Redirigiendo…</span>
               </div>
             )}
           </div>

@@ -130,13 +130,13 @@ namespace Backend.Controllers
         // PUT: api/recetas/5
         [Authorize]
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutReceta(int id, RecetaUpdateDto dto)
+        public async Task<ActionResult<RecetaDto>> PutReceta(int id, RecetaUpdateDto dto)
         {
             try
             {
                 var receta = await _context.Recetas.FindAsync(id);
                 if (receta == null)
-                    return NotFound(new { message = "La receta no existe." });
+                    return NotFound(new { message = $"La receta con ID {id} no existe." });
 
                 receta.Titulo = dto.Titulo.Trim();
                 receta.Descripcion = string.IsNullOrWhiteSpace(dto.Descripcion) ? null : dto.Descripcion.Trim();
@@ -155,7 +155,7 @@ namespace Backend.Controllers
                 await _context.SaveChangesAsync();
                 _cache.Remove(RecetasPublicCacheKey);
 
-                return NoContent();
+                return Ok(MapToDto(receta));
             }
             catch (Exception ex)
             {
