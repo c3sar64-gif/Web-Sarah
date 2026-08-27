@@ -9,6 +9,8 @@ namespace Backend.Services
     public class JwtService : IJwtService
     {
         private readonly string _secret;
+        private readonly string _issuer;
+        private readonly string _audience;
 
         public JwtService(IConfiguration configuration)
         {
@@ -17,6 +19,8 @@ namespace Backend.Services
                 throw new InvalidOperationException("Jwt:Secret debe estar configurado y tener al menos 32 bytes (256 bits) para HS256.");
 
             _secret = secret;
+            _issuer = configuration["Jwt:Issuer"] ?? "SarahBakeryApi";
+            _audience = configuration["Jwt:Audience"] ?? "SarahBakeryFrontend";
         }
 
         public string GenerateToken(Usuario usuario)
@@ -32,8 +36,10 @@ namespace Backend.Services
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
+                issuer: _issuer,
+                audience: _audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(15),
+                expires: DateTime.UtcNow.AddDays(7), // 7 días de duración para que la sesión de Sarah no expire a los 15 minutos
                 signingCredentials: credentials
             );
 

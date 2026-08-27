@@ -178,9 +178,19 @@ export default function AdminRecetaForm() {
 
       {/* Alerta Superior de Error */}
       {error && (
-        <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-xs sm:text-sm text-red-700 flex items-start gap-2.5 shadow-xs">
-          <AlertCircle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
-          <div className="flex-1 font-medium">{error}</div>
+        <div className="p-4 rounded-2xl bg-red-50 border border-red-200 text-xs sm:text-sm text-red-700 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-start gap-2.5">
+            <AlertCircle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
+            <div className="font-medium">{error}</div>
+          </div>
+          {error.includes('sesión') && (
+            <Link
+              to="/admin/login"
+              className="px-4 py-1.5 rounded-full bg-red-600 hover:bg-red-700 text-white text-xs font-bold shrink-0 text-center transition-colors"
+            >
+              Iniciar Sesión
+            </Link>
+          )}
         </div>
       )}
 
