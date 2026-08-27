@@ -2,26 +2,35 @@
 User-agent: *
 Allow: /
 
-# Permitir agentes de IA principales
+# Permitir explícitamente motores de búsqueda y asistentes de IA (Google, Gemini, ChatGPT, Claude, Perplexity)
+User-agent: Googlebot
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
 User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
 Allow: /
 
 User-agent: ClaudeBot
 Allow: /
 
-User-agent: PerplexityBot
+User-agent: anthropic-ai
 Allow: /
 
-User-agent: Google-Extended
+User-agent: PerplexityBot
 Allow: /
 
 User-agent: Applebot-Extended
 Allow: /
 
 User-agent: Amazonbot
-Allow: /
-
-User-agent: anthropic-ai
 Allow: /
 
 # Content Signals (https://contentsignals.org/)
@@ -33,4 +42,3 @@ Content-Signal: ai-train=no, search=yes, ai-input=yes
 
 Sitemap: https://sarah-horneado-con-amor.com/sitemap.xml
 LLMs-txt: https://sarah-horneado-con-amor.com/llms.txt
-
