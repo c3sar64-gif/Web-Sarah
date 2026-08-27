@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useMemo, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useRecetas } from '../../hooks/useRecetas'
 import { deleteReceta } from '../../api/recetas'
 import type { Receta } from '../../types/receta'
@@ -14,14 +14,30 @@ import {
   Edit,
   Trash2,
   Sparkles,
+  CheckCircle,
+  RefreshCw,
 } from 'lucide-react'
 import YouTubeIcon from '../../components/YouTubeIcon'
 
 export default function AdminRecetas() {
+  const location = useLocation()
+  const navigate = useNavigate()
   const { recetas, loading, error, refetch } = useRecetas(true) // todas: true (modo admin)
   const [searchTerm, setSearchTerm] = useState('')
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
+  const [flashMessage, setFlashMessage] = useState<string | null>(
+    (location.state as { flashMessage?: string })?.flashMessage ?? null
+  )
+
+  useEffect(() => {
+    if (flashMessage) {
+      // Limpiar state del historial después de leer
+      navigate(location.pathname, { replace: true, state: {} })
+      const timer = setTimeout(() => setFlashMessage(null), 4500)
+      return () => clearTimeout(timer)
+    }
+  }, [flashMessage, location.pathname, navigate])
 
   const filtered = useMemo(() => {
     return recetas.filter((r) =>
@@ -36,6 +52,7 @@ export default function AdminRecetas() {
     setActionError(null)
     try {
       await deleteReceta(receta.id)
+      setFlashMessage(`La receta "${receta.titulo}" fue eliminada.`)
       await refetch()
     } catch (err) {
       setActionError('No se pudo eliminar la receta. Inténtalo nuevamente.')
@@ -58,14 +75,32 @@ export default function AdminRecetas() {
           </p>
         </div>
 
-        <Link
-          to="/admin/recetas/nuevo"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-rose-metallic hover:bg-rose-metallic-dark text-white text-xs font-bold transition-all shadow-xs shrink-0"
-        >
-          <Plus className="w-4 h-4" />
-          Nueva Receta
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => refetch()}
+            disabled={loading}
+            className="p-2.5 rounded-full border border-taupe/40 text-gray-600 hover:bg-taupe/20 transition-colors"
+            title="Recargar recetas"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+          </button>
+          <Link
+            to="/admin/recetas/nuevo"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-rose-metallic hover:bg-rose-metallic-dark text-white text-xs font-bold transition-all shadow-xs shrink-0"
+          >
+            <Plus className="w-4 h-4" />
+            Nueva Receta
+          </Link>
+        </div>
       </div>
+
+      {/* Mensaje Flash de Éxito */}
+      {flashMessage && (
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm text-emerald-800 flex items-center gap-2.5 shadow-xs animate-fadeIn">
+          <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+          <span className="font-bold">{flashMessage}</span>
+        </div>
+      )}
 
       {/* Buscador */}
       <div className="relative max-w-md">
@@ -75,7 +110,7 @@ export default function AdminRecetas() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Buscar recetas por título..."
-          className="w-full pl-10 pr-4 py-2 rounded-xl bg-white border border-taupe/40 text-xs text-gray-900 focus:outline-none focus:border-mauve"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-taupe/40 text-xs text-gray-900 focus:outline-none focus:border-mauve shadow-2xs"
         />
       </div>
 
