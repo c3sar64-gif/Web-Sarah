@@ -16,10 +16,16 @@ namespace Backend.Data
         public DbSet<Usuario> Usuarios => Set<Usuario>();
         public DbSet<Orden> Ordenes => Set<Orden>();
         public DbSet<OrdenDetalle> OrdenDetalles => Set<OrdenDetalle>();
+        public DbSet<Receta> Recetas => Set<Receta>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Receta>(entity =>
+            {
+                entity.ToTable("recetas");
+            });
 
             modelBuilder.Entity<Categoria>(entity =>
             {

@@ -8,8 +8,14 @@ export default function Footer() {
         <div>
           <span className="font-display text-2xl font-bold tracking-wide">Sarah</span>
           <p className="text-sm opacity-80 mt-2 max-w-xs leading-relaxed">
-            Horneado con Amor — repostería artesanal para tus momentos más dulces.
+            Horneado con Amor — repostería artesanal para tus momentos más dulces en Cochabamba.
           </p>
+          <div className="flex flex-wrap gap-4 mt-4 text-xs font-medium text-cream/90">
+            <a href="/" className="hover:underline">Inicio</a>
+            <a href="/especialidades" className="hover:underline">Especialidades</a>
+            <a href="/recetas" className="hover:underline text-amber-200">📖 Recetas & Videos</a>
+            <a href="/contacto" className="hover:underline">Contacto</a>
+          </div>
         </div>
 
         <div>

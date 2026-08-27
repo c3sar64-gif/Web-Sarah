@@ -32,6 +32,16 @@ export default function AdminLayout() {
             >
               🧁 Catálogo de Productos
             </NavLink>
+            <NavLink
+              to="/admin/recetas"
+              className={({ isActive }) =>
+                `text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full transition-colors ${
+                  isActive ? 'bg-mauve text-white font-semibold shadow-xs' : 'text-[#3D2C33] hover:bg-taupe/20'
+                }`
+              }
+            >
+              📖 Recetas & Videos
+            </NavLink>
           </nav>
         </div>
 
@@ -52,4 +62,3 @@ export default function AdminLayout() {
     </div>
   )
 }
-
