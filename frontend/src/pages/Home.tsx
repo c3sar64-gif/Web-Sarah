@@ -6,6 +6,7 @@ import ProductCard from '../components/ProductCard'
 import ProductCardSkeleton from '../components/ProductCardSkeleton'
 import TrustBadges from '../components/TrustBadges'
 import BentoHome from '../components/BentoHome'
+import FAQSection from '../components/FAQSection'
 import { useProducts } from '../hooks/useProducts'
 import { Sparkles, ArrowRight } from 'lucide-react'
 
@@ -85,6 +86,9 @@ export default function Home() {
 
         {/* Bento Grid con Pasos, Cobertura y Testimonios */}
         <BentoHome />
+
+        {/* Sección de Preguntas Frecuentes (SEO y Conversión) */}
+        <FAQSection />
       </main>
 
       <Footer />

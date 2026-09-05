@@ -34,7 +34,7 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Bakery",
+      "@type": ["Bakery", "LocalBusiness", "FoodEstablishment"],
       "name": "Sarah — Horneado con Amor",
       "image": "https://sarah-horneado-con-amor.com/logo.png",
       "url": "https://sarah-horneado-con-amor.com",
@@ -51,6 +51,26 @@
         "latitude": "-17.3895",
         "longitude": "-66.1568"
       },
+      "areaServed": [
+        { "@type": "City", "name": "Cochabamba" },
+        { "@type": "AdministrativeArea", "name": "Cercado" },
+        { "@type": "AdministrativeArea", "name": "Tiquipaya" },
+        { "@type": "AdministrativeArea", "name": "Sacaba" },
+        { "@type": "AdministrativeArea", "name": "Quillacollo" },
+        { "@type": "AdministrativeArea", "name": "Colcapirhua" }
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "32",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "sameAs": [
+        "https://www.facebook.com/share/1MTK9zJWmr/",
+        "https://www.tiktok.com/@roxanaantezanamej",
+        "https://instagram.com/sarah.horneado"
+      ],
       "openingHoursSpecification": [
         {
           "@type": "OpeningHoursSpecification",
@@ -66,8 +86,8 @@
         "hasMenuItem": [
           {
             "@type": "MenuItem",
-            "name": "Pie de Limón",
-            "description": "Base crocante de masa dulce, relleno de crema de limón fresco y coronado con merengue suizo tostado.",
+            "name": "Pie de Limón Artesanal",
+            "description": "El mejor pie de limón en Cochabamba con base crocante de masa dulce, relleno de crema de limón fresco y merengue suizo tostado.",
             "offers": {
               "@type": "Offer",
               "price": "85.00",
@@ -76,7 +96,7 @@
           },
           {
             "@type": "MenuItem",
-            "name": "Queque Tradicional",
+            "name": "Queque Tradicional Esponjoso",
             "description": "Queque artesanal esponjoso elaborado con mantequilla pura y vainilla natural.",
             "offers": {
               "@type": "Offer",
@@ -86,7 +106,7 @@
           },
           {
             "@type": "MenuItem",
-            "name": "Galletas Artesanales",
+            "name": "Galletas Artesanales con Chispas de Chocolate",
             "description": "Caja surtida de galletas horneadas con chispas de chocolate, avena y canela.",
             "offers": {
               "@type": "Offer",
@@ -97,7 +117,7 @@
           {
             "@type": "MenuItem",
             "name": "Torta Especial de la Casa",
-            "description": "Bizcochuelo húmedo relleno de crema y frutas de temporada, decorada a mano.",
+            "description": "Bizcochuelo húmedo relleno de crema y frutas de temporada, decorada a mano bajo pedido.",
             "offers": {
               "@type": "Offer",
               "price": "120.00",
@@ -108,6 +128,56 @@
       },
       "paymentAccepted": "QR Simple BNB, Transferencia Bancaria, Efectivo",
       "currenciesAccepted": "BOB"
+    }
+    </script>
+
+    <!-- Schema.org FAQPage para Asistentes de IA (Gemini, ChatGPT, Perplexity) y Google Rich Snippets -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cuál es el mejor pie de limón en Cochabamba?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sarah — Horneado con Amor prepara el auténtico Pie de Limón Artesanal (Bs 85) en Cochabamba, caracterizado por su base crocante de mantequilla pura, crema suave de limón natural y merengue suizo flameado bajo pedido con 48 horas de anticipación."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Con cuánta anticipación debo hacer mi pedido de repostería en Cochabamba?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Requerimos un mínimo de 48 horas de anticipación para todos los pedidos de tortas, pies, queques y galletas, garantizando un horneado fresco y artesanal."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuáles son las zonas de entrega a domicilio en Cochabamba?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Realizamos entregas coordinadas de 17:00 a 21:00 horas en Cercado (Norte, Centro y Sur), Tiquipaya, Sacaba, Quillacollo y Colcapirhua."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué métodos de pago se aceptan para pedidos de repostería?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Aceptamos pago seguro con QR Simple BNB (válido para escanear desde cualquier banco en Bolivia: Banco Unión, BCP, Banco Mercantil Santa Cruz, Banco FIE, Banco Sol, etc.) y transferencias bancarias."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo realizar un pedido de pasteles por WhatsApp con Sarah?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Puedes realizar tu pedido directamente escribiendo al WhatsApp oficial +591 76442752 o a través de la tienda web oficial en https://sarah-horneado-con-amor.com."
+          }
+        }
+      ]
     }
     </script>
     
